@@ -6,21 +6,16 @@ package testcase.small.domain.user
 
 import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
-import com.github.francescojo.core.domain.user.repository.UserRepository
+import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
 import com.github.francescojo.lib.annotation.SmallTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.*
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
-import test.domain.user.FakeUserObjectFactory
-import test.domain.user.FakeUserObjectFactory.randomUser
+import test.domain.user.aggregate.randomUser
 import test.domain.user.randomCreateUserMessage
 
 /**
@@ -34,7 +29,7 @@ class CreateUserUseCaseSpec {
     @BeforeEach
     fun setup() {
         userRepository = mock()
-        sut = CreateUserUseCase.newInstance(userRepository, FakeUserObjectFactory)
+        sut = CreateUserUseCase.newInstance(userRepository)
 
         `when`(userRepository.save(any())).thenAnswer { return@thenAnswer it.arguments[0] }
     }

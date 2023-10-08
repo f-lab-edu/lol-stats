@@ -34,9 +34,8 @@ import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation
 import org.springframework.restdocs.snippet.Snippet
 import org.springframework.test.context.ActiveProfiles
+import test.TestContainerMariaDBConfig
 import test.endpoint.v1.JsonRequestAssertionsMixin
-import java.util.ArrayList
-import java.util.HashMap
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.reflect.KClass
 
@@ -47,6 +46,7 @@ import kotlin.reflect.KClass
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = [
         KopringApplication::class,
+        TestContainerMariaDBConfig::class
     ]
 )
 @ExtendWith(RestDocumentationExtension::class)

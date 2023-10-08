@@ -4,12 +4,10 @@
  */
 package testcase.small.domain.user
 
-import com.github.francescojo.core.domain.user.repository.UserRepository
+import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 import com.github.francescojo.core.domain.user.usecase.FindUserUseCase
 import com.github.francescojo.lib.annotation.SmallTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.not
-import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -17,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
-import test.domain.user.FakeUserObjectFactory.randomUser
+import test.domain.user.aggregate.randomUser
 import java.util.*
 
 /**

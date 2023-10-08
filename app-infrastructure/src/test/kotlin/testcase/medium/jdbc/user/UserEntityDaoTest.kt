@@ -5,20 +5,13 @@
 package testcase.medium.jdbc.user
 
 import com.github.francescojo.core.jdbc.user.UserEntity
-import com.github.francescojo.core.jdbc.user.UserObjectFactoryImpl.toEntity
 import com.github.francescojo.core.jdbc.user.dao.UserEntityDao
 import com.github.javafaker.Faker
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.nullValue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
+import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
-import test.domain.user.FakeUserObjectFactory.randomUser
+import test.domain.user.randomUserEntity
 import testcase.medium.JdbcTemplateMediumTestBase
 
 /**
@@ -32,7 +25,7 @@ class UserEntityDaoTest : JdbcTemplateMediumTestBase() {
     @Test
     fun insertTest() {
         // given:
-        val randomUser = randomUser().toEntity()
+        val randomUser = randomUserEntity()
 
         // then:
         val savedUser = sut.insert(randomUser)
@@ -41,7 +34,7 @@ class UserEntityDaoTest : JdbcTemplateMediumTestBase() {
         assertThat(savedUser.id, not(nullValue()))
 
         // then:
-        val foundUser = sut.selectById(savedUser.id!!)
+        val foundUser = sut.selectById(savedUser.id)
 
         // expect:
         assertThat(foundUser, `is`(savedUser))
@@ -52,21 +45,21 @@ class UserEntityDaoTest : JdbcTemplateMediumTestBase() {
     @Test
     fun updateTest() {
         // given:
-        val savedUser = sut.insert(randomUser().toEntity())
+        val savedUser = sut.insert(randomUserEntity())
 
         // when:
         val newNickname = Faker().superhero().name()
         val newEmail = Faker().internet().safeEmailAddress()
-        val foundUser = sut.selectById(savedUser.id!!)!!.apply {
+        val foundUser = sut.selectById(savedUser.id)!!.apply {
             this.nickname = newNickname
             this.email = newEmail
         }
 
         // then:
-        val updatedUser = sut.update(foundUser.id!!, foundUser)
+        val updatedUser = sut.update(foundUser.id, foundUser)
 
         // then:
-        val retrievedUser = sut.selectById(updatedUser.id!!)!!
+        val retrievedUser = sut.selectById(updatedUser.id)!!
 
         // expect:
         assertAll(
@@ -82,14 +75,14 @@ class UserEntityDaoTest : JdbcTemplateMediumTestBase() {
 
         @BeforeEach
         fun setup() {
-            savedUser = sut.insert(randomUser().toEntity())
+            savedUser = sut.insert(randomUserEntity())
         }
 
         @DisplayName("uuid")
         @Test
         fun byUuid() {
             // when:
-            val foundUser = sut.selectByUuid(savedUser.uuid)
+            val foundUser = sut.selectById(savedUser.id)
 
             // then:
             assertThat(foundUser, `is`(savedUser))

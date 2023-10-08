@@ -5,7 +5,7 @@
 package testcase.small.domain.user
 
 import com.github.francescojo.core.domain.user.exception.UserByIdNotFoundException
-import com.github.francescojo.core.domain.user.repository.UserRepository
+import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 import com.github.francescojo.core.domain.user.usecase.DeleteUserUseCase
 import com.github.francescojo.lib.annotation.SmallTest
 import org.hamcrest.CoreMatchers.`is`
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
-import test.domain.user.FakeUserObjectFactory.randomUser
+import test.domain.user.aggregate.randomUser
 import java.util.*
 
 /**

@@ -4,8 +4,8 @@
  */
 package com.github.francescojo.appconfig.bean
 
-import com.github.francescojo.core.domain.user.UserObjectFactory
-import com.github.francescojo.core.domain.user.repository.UserRepository
+import com.github.francescojo.core.domain.user.repository.UserReadonlyRepository
+import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
 import com.github.francescojo.core.domain.user.usecase.DeleteUserUseCase
 import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
@@ -21,29 +21,27 @@ class UserBeans {
     @Bean
     fun createUserUseCase(
         userRepository: UserRepository,
-        userObjectFactory: UserObjectFactory
     ) = CreateUserUseCase.newInstance(
-        userRepository,
-        userObjectFactory
-    )
-
-    @Bean
-    fun getUserUseCase(
-        userRepository: UserRepository
-    ) = FindUserUseCase.newInstance(
         userRepository
     )
 
     @Bean
+    fun getUserUseCase(
+        userReadonlyRepository: UserReadonlyRepository
+    ) = FindUserUseCase.newInstance(
+        userReadonlyRepository
+    )
+
+    @Bean
     fun editUserUseCase(
-        userRepository: UserRepository
+        userRepository: UserRepository,
     ) = EditUserUseCase.newInstance(
         userRepository
     )
 
     @Bean
     fun deleteUserUseCase(
-        userRepository: UserRepository
+        userRepository: UserRepository,
     ) = DeleteUserUseCase.newInstance(
         userRepository
     )

@@ -1,11 +1,11 @@
 /*
- * sirloin-jvmlib
- * Distributed under MIT licence
+ * kopringboot-multimodule-template
+ * Distributed under CC BY-NC-SA
  */
 package com.github.francescojo.lib.util
 
 import java.nio.ByteBuffer
-import java.util.UUID
+import java.util.*
 
 /**
  * A 'nil' UUID for emptiness checks. UUID value: "00000000-0000-0000-0000-000000000000"
