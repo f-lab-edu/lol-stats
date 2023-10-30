@@ -8,6 +8,7 @@ import com.github.francescojo.core.annotation.UseCase
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
+import com.github.francescojo.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.UserByIdNotFoundException
 import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 import com.github.francescojo.core.domain.user.vo.UserModel
@@ -22,6 +23,7 @@ interface EditUserUseCase {
     interface EditUserMessage {
         val nickname: String?
         val email: String?
+        val phoneNumber: String?
     }
 
     companion object {
@@ -45,6 +47,9 @@ internal class EditUserUseCaseImpl(
         }
         message.email.takeIf { !it.isNullOrEmpty() }?.let { email ->
             users.findByEmail(email)?.let { throw SameEmailUserAlreadyExistException(email) }
+        }
+        message.phoneNumber.takeIf { !it.isNullOrEmpty() }?.let { phoneNumber ->
+            users.findByPhoneNumber(phoneNumber)?.let { throw SamePhoneNumberUserAlreadyExistException(phoneNumber) }
         }
 
         return users.save(UserModel.from(existingUser).applyValues(message))

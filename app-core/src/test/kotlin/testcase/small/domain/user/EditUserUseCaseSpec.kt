@@ -7,6 +7,7 @@ package testcase.small.domain.user
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
+import com.github.francescojo.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.UserByIdNotFoundException
 import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
@@ -68,6 +69,7 @@ class EditUserUseCaseSpec {
         assertAll(
             { assertThat(editedUser.nickname, `is`(message.nickname)) },
             { assertThat(editedUser.email, `is`(message.email)) },
+            { assertThat(editedUser.phoneNumber, `is`(message.phoneNumber)) },
         )
     }
 
@@ -114,6 +116,19 @@ class EditUserUseCaseSpec {
             // then:
             assertThrows<SameEmailUserAlreadyExistException> { sut.editUser(id, message) }
         }
+
+        @DisplayName("PhoneNumber is duplicated")
+        @Test
+        fun errorIfPhoneNumberIsDuplicated() {
+            // given:
+            val samePhoneNumberUser = randomUser(id = id, phoneNumber = message.phoneNumber!!)
+
+            // and:
+            `when`(userRepository.findByPhoneNumber(message.phoneNumber!!)).thenReturn(samePhoneNumberUser)
+
+            // then:
+            assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.editUser(id, message) }
+        }
     }
 
     @DisplayName("Some field is preserved if:")
@@ -146,7 +161,8 @@ class EditUserUseCaseSpec {
                 { assertThat(updatedUser.nickname, `is`(existingUser.nickname)) },
                 { assertThat(updatedUser.nickname, not(message.nickname)) },
                 { assertThat(updatedUser.email, `is`(message.email)) },
-            )
+                { assertThat(updatedUser.phoneNumber, `is`(message.phoneNumber)) },
+                )
         }
 
         @DisplayName("email is omitted in message")
@@ -162,7 +178,26 @@ class EditUserUseCaseSpec {
             assertAll(
                 { assertThat(updatedUser.nickname, `is`(message.nickname)) },
                 { assertThat(updatedUser.email, `is`(existingUser.email)) },
-                { assertThat(updatedUser.email, not(message.email)) }
+                { assertThat(updatedUser.email, not(message.email)) },
+                { assertThat(updatedUser.phoneNumber, `is`(message.phoneNumber)) },
+            )
+        }
+
+        @DisplayName("PhoneNumber is omitted in message")
+        @Test
+        fun phoneNumberIsPreserved() {
+            // given:
+            val message = randomEditUserMessage(phoneNumber = null)
+
+            // then:
+            val updatedUser = sut.editUser(id, message)
+
+            // expect:
+            assertAll(
+                { assertThat(updatedUser.nickname, `is`(message.nickname)) },
+                { assertThat(updatedUser.email, `is`(message.email)) },
+                { assertThat(updatedUser.phoneNumber, `is`(existingUser.phoneNumber)) },
+                { assertThat(updatedUser.phoneNumber, `not`(message.phoneNumber)) },
             )
         }
     }

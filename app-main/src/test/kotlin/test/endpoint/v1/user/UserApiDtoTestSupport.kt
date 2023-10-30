@@ -22,7 +22,7 @@ fun CreateUserRequest.Companion.random(
 fun EditUserRequest.Companion.random(
     nickname: String? = Faker().name().fullName(),
     email: String? = Faker().internet().emailAddress(),
-    phoneNumber: String = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
+    phoneNumber: String? = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
 ) = EditUserRequest(
     nickname = nickname,
     email = email,
