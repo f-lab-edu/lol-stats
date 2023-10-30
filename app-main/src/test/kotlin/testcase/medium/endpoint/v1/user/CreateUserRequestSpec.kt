@@ -15,6 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import testcase.medium.ControllerMediumTestBase
+import java.util.Locale
 import java.util.stream.Stream
 
 /**
@@ -30,8 +31,9 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
         // given:
         val payload = FakeCreateUserRequest(
             nickname = nickname,
-            email = Faker().internet().emailAddress()
-        )
+            email = Faker().internet().emailAddress(),
+            phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
+            )
 
         // when:
         val request = post(ApiPathsV1.USERS, payload)
@@ -47,12 +49,36 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
     @MethodSource("badEmails")
     fun failIfEmailsAreBad(
         testName: String,
-        email: String
+        email: String,
     ) {
         // given:
         val payload = FakeCreateUserRequest(
             nickname = Faker().name().fullName(),
-            email = email
+            email = email,
+            phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
+        )
+
+        // when:
+        val request = post(ApiPathsV1.USERS, payload)
+
+        // then:
+        val errorResponse = request.send().expect4xx()
+
+        // expect:
+        assertThat(ErrorCodes.from(errorResponse.code), `is`(ErrorCodes.WRONG_INPUT))
+    }
+
+    @ParameterizedTest(name = "Fails if it is {0}")
+    @MethodSource("badPhoneNumber")
+    fun failIfPhoneNumbersAreBad(
+        testName: String,
+        phoneNumber: String?,
+    ) {
+        // given:
+        val payload = FakeCreateUserRequest(
+            nickname = Faker().name().fullName(),
+            email = Faker().internet().emailAddress(),
+            phoneNumber = phoneNumber,
         )
 
         // when:
@@ -68,7 +94,8 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
     @JsonDeserialize
     private data class FakeCreateUserRequest(
         val nickname: String?,
-        val email: String?
+        val email: String?,
+        val phoneNumber: String?,
     )
 
     companion object {
@@ -97,6 +124,22 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
             Arguments.of(
                 "longer than ${User.LENGTH_EMAIL_MAX}",
                 Faker().letterify("?").repeat(User.LENGTH_EMAIL_MAX + 1) + "@company.com",
+            )
+        )
+
+        @JvmStatic
+        fun badPhoneNumber(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                "empty",
+                "",
+            ),
+            Arguments.of(
+                "not an Korea phone number format",
+                Faker(Locale.US).phoneNumber().phoneNumber(),
+            ),
+            Arguments.of(
+                "longer than ${User.LENGTH_PHONE_NUMBER_MAX}",
+                Faker().letterify("?").repeat(User.LENGTH_PHONE_NUMBER_MAX + 1),
             )
         )
     }

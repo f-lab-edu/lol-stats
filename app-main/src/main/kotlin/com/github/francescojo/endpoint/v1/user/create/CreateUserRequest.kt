@@ -11,6 +11,7 @@ import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 
 /**
@@ -30,9 +31,17 @@ data class CreateUserRequest(
     @JsonProperty
     @JsonPropertyDescription(DESC_EMAIL)
     override val email: String,
+
+    @field:NotEmpty
+    @field:Size(max = User.LENGTH_PHONE_NUMBER_MAX)
+    @Pattern(regexp = "(\\d{2,3})-(\\d{3,4})-(\\d{4})\$",message = "must be a well-formed phone number")
+    @JsonProperty
+    @JsonPropertyDescription(DESC_PHONE_NUMBER)
+    override val phoneNumber: String,
 ): CreateUserUseCase.CreateUserMessage {
     companion object {
         const val DESC_NAME = ""
         const val DESC_EMAIL = ""
+        const val DESC_PHONE_NUMBER = ""
     }
 }

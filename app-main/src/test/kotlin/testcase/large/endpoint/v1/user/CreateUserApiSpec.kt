@@ -64,12 +64,22 @@ class CreateUserApiSpec : EndpointLargeTestBase() {
                 .expect4xx(HttpStatus.CONFLICT)
                 .withExceptionCode(ErrorCodes.USER_BY_EMAIL_DUPLICATED)
         }
+
+        @DisplayName("Phone Number is duplicated")
+        @Test
+        fun phoneNumberIsDuplicated() {
+            // expect:
+            createUserApi(CreateUserRequest.random(email = createdUser.phoneNumber))
+                .expect4xx(HttpStatus.CONFLICT)
+                .withExceptionCode(ErrorCodes.USER_BY_PHONE_NUMBER_DUPLICATED)
+        }
     }
 
     private fun assertThat(actual: UserResponse, isReflecting: CreateUserRequest) {
         assertAll(
             { assertThat(actual.nickname, `is`(isReflecting.nickname)) },
-            { assertThat(actual.email, `is`(isReflecting.email)) }
+            { assertThat(actual.email, `is`(isReflecting.email)) },
+            { assertThat(actual.phoneNumber, `is`(isReflecting.phoneNumber)) }
         )
     }
 }

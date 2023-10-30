@@ -18,6 +18,7 @@ internal data class UserModel(
     override val id: UUID,
     override val nickname: String,
     override val email: String,
+    override val phoneNumber: String,
     override val registeredAt: Instant,
     override val lastActiveAt: Instant,
     override val deleted: Boolean
@@ -25,6 +26,7 @@ internal data class UserModel(
     fun applyValues(values: EditUserUseCase.EditUserMessage): User = this.copy(
         nickname = values.nickname ?: this.nickname,
         email = values.email ?: this.email,
+        phoneNumber = values.phoneNumber ?: this.phoneNumber,
         lastActiveAt = Instant.now()
     )
 
@@ -39,6 +41,7 @@ internal data class UserModel(
             id: UUID = UUID.randomUUID(),
             nickname: String,
             email: String,
+            phoneNumber: String,
             registeredAt: Instant? = null,
             lastActiveAt: Instant? = null,
             deleted: Boolean = false
@@ -49,6 +52,7 @@ internal data class UserModel(
                 id = id,
                 nickname = nickname,
                 email = email,
+                phoneNumber = phoneNumber,
                 registeredAt = registeredAt ?: now,
                 lastActiveAt = lastActiveAt ?: now,
                 deleted = deleted
@@ -63,6 +67,7 @@ internal data class UserModel(
                     id = id,
                     nickname = nickname,
                     email = email,
+                    phoneNumber = phoneNumber,
                     registeredAt = registeredAt,
                     lastActiveAt = lastActiveAt,
                     deleted = deleted

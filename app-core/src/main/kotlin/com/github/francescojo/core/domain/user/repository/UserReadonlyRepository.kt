@@ -17,6 +17,8 @@ interface UserReadonlyRepository {
 
     fun findByEmail(email: String): User?
 
+    fun findByPhoneNumber(phoneNumber: String): User?
+
     companion object {
         const val NAME = "com.github.francescojo.core.domain.user.UserReadonlyRepository"
     }

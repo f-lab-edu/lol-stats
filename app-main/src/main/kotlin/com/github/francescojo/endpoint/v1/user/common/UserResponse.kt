@@ -30,6 +30,10 @@ data class UserResponse(
     val email: String,
 
     @JsonProperty
+    @JsonPropertyDescription(DESC_PHONE_NUMBER)
+    val phoneNumber: String,
+
+    @JsonProperty
     @JsonPropertyDescription(DESC_REGISTERED_AT)
     val registeredAt: Instant,
 
@@ -43,6 +47,7 @@ data class UserResponse(
                 id == other.id &&
                 nickname == other.nickname &&
                 email == other.email &&
+                phoneNumber == other.phoneNumber &&
                 registeredAt.truncateToSeconds() == other.registeredAt.truncateToSeconds() &&
                 lastActiveAt.truncateToSeconds() == other.lastActiveAt.truncateToSeconds()
     }
@@ -51,6 +56,7 @@ data class UserResponse(
         var result = id.hashCode()
         result = 31 * result + nickname.hashCode()
         result = 31 * result + email.hashCode()
+        result = 31 * result + phoneNumber.hashCode()
         result = 31 * result + registeredAt.truncateToSeconds().hashCode()
         result = 31 * result + lastActiveAt.truncateToSeconds().hashCode()
         return result
@@ -60,6 +66,7 @@ data class UserResponse(
         const val DESC_ID = ""
         const val DESC_NICKNAME = ""
         const val DESC_EMAIL = ""
+        const val DESC_PHONE_NUMBER = ""
         const val DESC_REGISTERED_AT = ""
         const val DESC_LAST_ACTIVE_AT = ""
 
@@ -68,6 +75,7 @@ data class UserResponse(
                 id = id,
                 nickname = nickname,
                 email = email,
+                phoneNumber = phoneNumber,
                 registeredAt = registeredAt,
                 lastActiveAt = lastActiveAt
             )

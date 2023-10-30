@@ -6,6 +6,7 @@ package testcase.small.domain.user
 
 import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
+import com.github.francescojo.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException
 import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
 import com.github.francescojo.lib.annotation.SmallTest
@@ -17,6 +18,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import test.domain.user.aggregate.randomUser
 import test.domain.user.randomCreateUserMessage
+import java.util.*
 
 /**
  * @since 2021-08-10
@@ -74,5 +76,18 @@ class CreateUserUseCaseSpec {
 
         // then:
         assertThrows<SameEmailUserAlreadyExistException> { sut.createUser(message) }
+    }
+
+    @DisplayName("PhoneNumber must not be duplicated")
+    @Test
+    fun errorIfPhoneNumberIsDuplicated() {
+        // given:
+        val message = randomCreateUserMessage()
+
+        // and:
+        `when`(userRepository.findByPhoneNumber(message.phoneNumber)).thenReturn(randomUser(phoneNumber = message.phoneNumber))
+
+        // then:
+        assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.createUser(message) }
     }
 }

@@ -14,6 +14,7 @@ internal fun randomUserEntity(
     id: UUID = UUID.randomUUID(),
     nickname: String = Faker().name().fullName(),
     email: String = Faker().internet().emailAddress(),
+    phoneNumber: String = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
     registeredAt: Instant = Instant.now(),
     lastActiveAt: Instant = Instant.now(),
     deleted: Boolean = false
@@ -22,6 +23,7 @@ internal fun randomUserEntity(
         id = id,
         nickname = nickname,
         email = email,
+        phoneNumber = phoneNumber,
         registeredAt = registeredAt,
         lastActiveAt = lastActiveAt,
         deleted = deleted

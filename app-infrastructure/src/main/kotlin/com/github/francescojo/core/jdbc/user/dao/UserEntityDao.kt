@@ -22,6 +22,8 @@ internal interface UserEntityDao {
 
     fun selectByEmail(email: String): UserEntity?
 
+    fun selectByPhoneNumber(phoneNumber: String): UserEntity?
+
     fun insert(userEntity: UserEntity): UserEntity
 
     fun update(id: UUID, userEntity: UserEntity): UserEntity
@@ -64,18 +66,30 @@ internal class UserEntityDaoImpl(
         return selectOne(sql, email)
     }
 
+    override fun selectByPhoneNumber(phoneNumber: String): UserEntity? {
+        val sql = """
+            SELECT *
+            FROM `${UserEntity.TABLE}` u
+            WHERE u.`${UserEntity.COL_PHONE_NUMBER}` = ?
+              AND u.`${UserEntity.COL_DELETED}` = FALSE
+        """.trimIndent()
+
+        return selectOne(sql, phoneNumber)
+    }
+
     override fun insert(userEntity: UserEntity): UserEntity {
         val sql = """
             INSERT INTO `${UserEntity.TABLE}` (
                 `${UserEntity.COL_ID}`,
                 `${UserEntity.COL_NICKNAME}`,
                 `${UserEntity.COL_EMAIL}`,
+                `${UserEntity.COL_PHONE_NUMBER}`,
                 `${UserEntity.COL_DELETED}`,
                 `${UserEntity.COL_CREATED_AT}`,
                 `${UserEntity.COL_UPDATED_AT}`,
                 `${UserEntity.COL_VERSION}`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """.trimIndent()
 
         return userEntity.apply {
@@ -84,10 +98,11 @@ internal class UserEntityDaoImpl(
                 setBinaryEx(1, userEntity.id.toByteArray())
                 setStringEx(2, userEntity.nickname)
                 setStringEx(3, userEntity.email)
-                setBooleanEx(4, userEntity.deleted)
-                setTimestampEx(5, userEntity.registeredAt)
-                setTimestampEx(6, userEntity.lastActiveAt)
-                setLongEx(7, userEntity.version)
+                setStringEx(4, userEntity.phoneNumber)
+                setBooleanEx(5, userEntity.deleted)
+                setTimestampEx(6, userEntity.registeredAt)
+                setTimestampEx(7, userEntity.lastActiveAt)
+                setLongEx(8, userEntity.version)
             }.key!!.toLong()
         }
     }
@@ -97,6 +112,7 @@ internal class UserEntityDaoImpl(
             UPDATE `${UserEntity.TABLE}`
             SET `${UserEntity.COL_NICKNAME}` = ?,
                 `${UserEntity.COL_EMAIL}` = ?,
+                `${UserEntity.COL_PHONE_NUMBER}` = ?,
                 `${UserEntity.COL_DELETED}` = ?,
                 `${UserEntity.COL_CREATED_AT}` = ?,
                 `${UserEntity.COL_UPDATED_AT}` = ?,
@@ -108,11 +124,12 @@ internal class UserEntityDaoImpl(
         val affectedRows = super.doUpdate(UserEntity.COL_ID, sql) {
             setStringEx(1, userEntity.nickname)
             setStringEx(2, userEntity.email)
-            setBooleanEx(3, userEntity.deleted)
-            setTimestampEx(4, userEntity.registeredAt)
-            setTimestampEx(5, userEntity.lastActiveAt)
-            setLongEx(6, userEntity.version)
-            setBinaryEx(7, id.toByteArray())
+            setStringEx(3, userEntity.phoneNumber)
+            setBooleanEx(4, userEntity.deleted)
+            setTimestampEx(5, userEntity.registeredAt)
+            setTimestampEx(6, userEntity.lastActiveAt)
+            setLongEx(7, userEntity.version)
+            setBinaryEx(8, id.toByteArray())
         }
 
         return when (affectedRows) {
