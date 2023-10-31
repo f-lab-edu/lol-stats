@@ -49,6 +49,10 @@ class CreateUserUseCaseSpec {
         assertAll(
             { assertThat(createdUser.nickname, `is`(message.nickname)) },
             { assertThat(createdUser.email, `is`(message.email)) },
+            { assertThat(createdUser.phoneNumber, `is`(message.phoneNumber)) },
+            { assertThat(createdUser.address?.zipCode, `is`(message.zipCode)) },
+            { assertThat(createdUser.address?.streetAdr, `is`(message.streetAdr)) },
+            { assertThat(createdUser.address?.detailAdr, `is`(message.detailAdr)) },
         )
     }
 

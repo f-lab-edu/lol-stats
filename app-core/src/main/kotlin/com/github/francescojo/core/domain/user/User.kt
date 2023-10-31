@@ -19,6 +19,8 @@ interface User : SoftDeletable {
 
     val email: String
 
+    val address: Address?
+
     val phoneNumber: String
 
     val registeredAt: Instant
@@ -39,15 +41,28 @@ interface User : SoftDeletable {
             phoneNumber: String,
             registeredAt: Instant? = null,
             lastActiveAt: Instant? = null,
-            deleted: Boolean = false
-        ): User = UserModel.create(
-            id = id,
-            nickname = nickname,
-            email = email,
-            phoneNumber = phoneNumber,
-            registeredAt = registeredAt,
-            lastActiveAt = lastActiveAt,
-            deleted = deleted
-        )
+            deleted: Boolean = false,
+            zipCode: String? = null,
+            streetAdr: String? = null,
+            detailAdr: String? = null,
+        ): User {
+            val address = if (zipCode != null && streetAdr != null) {
+                object : Address {
+                    override val zipCode: String = zipCode
+                    override val streetAdr: String  = streetAdr
+                    override val detailAdr: String? = detailAdr
+                }
+            } else null
+            return UserModel.create(
+                id = id,
+                nickname = nickname,
+                email = email,
+                phoneNumber = phoneNumber,
+                registeredAt = registeredAt,
+                lastActiveAt = lastActiveAt,
+                deleted = deleted,
+                address = address
+            )
+        }
     }
 }

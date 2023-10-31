@@ -38,6 +38,10 @@ data class CreateUserRequest(
     @JsonProperty
     @JsonPropertyDescription(DESC_PHONE_NUMBER)
     override val phoneNumber: String,
+
+    override val zipCode: String?,
+    override val streetAdr: String?,
+    override val detailAdr: String?,
 ): CreateUserUseCase.CreateUserMessage {
     companion object {
         const val DESC_NAME = ""
