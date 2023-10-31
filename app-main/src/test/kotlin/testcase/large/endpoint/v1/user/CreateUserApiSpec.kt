@@ -32,7 +32,6 @@ class CreateUserApiSpec : EndpointLargeTestBase() {
             requestFields = null,
             responseFields = null
         ).expect2xx(UserResponse::class)
-
         // expect:
         assertThat(response, isReflecting = request)
     }
@@ -69,7 +68,7 @@ class CreateUserApiSpec : EndpointLargeTestBase() {
         @Test
         fun phoneNumberIsDuplicated() {
             // expect:
-            createUserApi(CreateUserRequest.random(email = createdUser.phoneNumber))
+            createUserApi(CreateUserRequest.random(phoneNumber = createdUser.phoneNumber))
                 .expect4xx(HttpStatus.CONFLICT)
                 .withExceptionCode(ErrorCodes.USER_BY_PHONE_NUMBER_DUPLICATED)
         }

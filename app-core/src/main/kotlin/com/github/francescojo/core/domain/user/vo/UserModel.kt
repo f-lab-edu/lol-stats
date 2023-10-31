@@ -4,6 +4,7 @@
  */
 package com.github.francescojo.core.domain.user.vo
 
+import com.github.francescojo.core.domain.user.Address
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
 import java.time.Instant
@@ -19,6 +20,7 @@ internal data class UserModel(
     override val nickname: String,
     override val email: String,
     override val phoneNumber: String,
+    override val address: Address?,
     override val registeredAt: Instant,
     override val lastActiveAt: Instant,
     override val deleted: Boolean
@@ -42,9 +44,10 @@ internal data class UserModel(
             nickname: String,
             email: String,
             phoneNumber: String,
+            address: Address? = null,
             registeredAt: Instant? = null,
             lastActiveAt: Instant? = null,
-            deleted: Boolean = false
+            deleted: Boolean = false,
         ): UserModel {
             val now = Instant.now()
 
@@ -53,6 +56,7 @@ internal data class UserModel(
                 nickname = nickname,
                 email = email,
                 phoneNumber = phoneNumber,
+                address = address,
                 registeredAt = registeredAt ?: now,
                 lastActiveAt = lastActiveAt ?: now,
                 deleted = deleted
@@ -68,6 +72,7 @@ internal data class UserModel(
                     nickname = nickname,
                     email = email,
                     phoneNumber = phoneNumber,
+                    address = address,
                     registeredAt = registeredAt,
                     lastActiveAt = lastActiveAt,
                     deleted = deleted
