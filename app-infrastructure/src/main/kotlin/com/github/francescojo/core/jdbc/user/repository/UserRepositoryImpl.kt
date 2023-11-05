@@ -25,7 +25,6 @@ internal class UserRepositoryImpl(
         } ?: run {
             userEntityJdbcDao.insert(UserEntity.from(user))
         }
-
         return updateCache(savedUser)
     }
 }

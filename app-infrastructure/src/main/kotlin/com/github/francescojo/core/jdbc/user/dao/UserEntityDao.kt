@@ -84,12 +84,18 @@ internal class UserEntityDaoImpl(
                 `${UserEntity.COL_NICKNAME}`,
                 `${UserEntity.COL_EMAIL}`,
                 `${UserEntity.COL_PHONE_NUMBER}`,
+                `${UserEntity.COL_ZIP_CODE}`,
+                `${UserEntity.COL_STREET_ADR}`,
+                `${UserEntity.COL_DETAIL_ADR}`,
+
+                
                 `${UserEntity.COL_DELETED}`,
                 `${UserEntity.COL_CREATED_AT}`,
                 `${UserEntity.COL_UPDATED_AT}`,
-                `${UserEntity.COL_VERSION}`
+                `${UserEntity.COL_VERSION}`,
+                `${UserEntity.COL_SALT}`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """.trimIndent()
 
         return userEntity.apply {
@@ -99,10 +105,14 @@ internal class UserEntityDaoImpl(
                 setStringEx(2, userEntity.nickname)
                 setStringEx(3, userEntity.email)
                 setStringEx(4, userEntity.phoneNumber)
-                setBooleanEx(5, userEntity.deleted)
-                setTimestampEx(6, userEntity.registeredAt)
-                setTimestampEx(7, userEntity.lastActiveAt)
-                setLongEx(8, userEntity.version)
+                setStringEx(5, userEntity.zipCode)
+                setStringEx(6, userEntity.streetAdr)
+                setStringEx(7, userEntity.detailAdr)
+                setBooleanEx(8, userEntity.deleted)
+                setTimestampEx(9, userEntity.registeredAt)
+                setTimestampEx(10, userEntity.lastActiveAt)
+                setLongEx(11, userEntity.version)
+                setBinaryEx(12, userEntity.salt)
             }.key!!.toLong()
         }
     }
@@ -113,10 +123,14 @@ internal class UserEntityDaoImpl(
             SET `${UserEntity.COL_NICKNAME}` = ?,
                 `${UserEntity.COL_EMAIL}` = ?,
                 `${UserEntity.COL_PHONE_NUMBER}` = ?,
+                `${UserEntity.COL_ZIP_CODE}` = ?,
+                `${UserEntity.COL_STREET_ADR}` = ?,
+                `${UserEntity.COL_DETAIL_ADR}` = ?,
                 `${UserEntity.COL_DELETED}` = ?,
                 `${UserEntity.COL_CREATED_AT}` = ?,
                 `${UserEntity.COL_UPDATED_AT}` = ?,
-                `${UserEntity.COL_VERSION}` = ?
+                `${UserEntity.COL_VERSION}` = ?,
+                `${UserEntity.COL_SALT}` = ?
             WHERE `${UserEntity.COL_ID}` = ?
         """.trimIndent()
 
@@ -125,11 +139,15 @@ internal class UserEntityDaoImpl(
             setStringEx(1, userEntity.nickname)
             setStringEx(2, userEntity.email)
             setStringEx(3, userEntity.phoneNumber)
-            setBooleanEx(4, userEntity.deleted)
-            setTimestampEx(5, userEntity.registeredAt)
-            setTimestampEx(6, userEntity.lastActiveAt)
-            setLongEx(7, userEntity.version)
-            setBinaryEx(8, id.toByteArray())
+            setStringEx(4, userEntity.zipCode)
+            setStringEx(5, userEntity.streetAdr)
+            setStringEx(6, userEntity.detailAdr)
+            setBooleanEx(7, userEntity.deleted)
+            setTimestampEx(8, userEntity.registeredAt)
+            setTimestampEx(9, userEntity.lastActiveAt)
+            setLongEx(10, userEntity.version)
+            setBinaryEx(11, userEntity.salt)
+            setBinaryEx(12, id.toByteArray())
         }
 
         return when (affectedRows) {

@@ -44,9 +44,10 @@ internal class UserReadonlyRepositoryImpl(
         (emailToUserCache.get(email) ?: userEntityJdbcDao.selectByEmail(email)?.let { updateCache(it) })
 
     override fun findByPhoneNumber(phoneNumber: String): User? =
-        (phoneNumberToUserCache.get(phoneNumber) ?: userEntityJdbcDao.selectByPhoneNumber(phoneNumber)?.let { updateCache(it) })
+        (phoneNumberToUserCache.get(phoneNumber)
+            ?: userEntityJdbcDao.selectByPhoneNumber(phoneNumber)?.let { updateCache(it) })
 
-    protected fun updateCache(userEntity: UserEntity): User {
+    internal fun updateCache(userEntity: UserEntity): User {
         val user = userEntity.toUser()
 
         idToUserCache.put(user.id, user)
