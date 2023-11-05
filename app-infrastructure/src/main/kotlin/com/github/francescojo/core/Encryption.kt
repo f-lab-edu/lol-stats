@@ -1,5 +1,6 @@
-package com.github.francescojo.lib.util
+package com.github.francescojo.core
 
+import io.github.cdimascio.dotenv.Dotenv
 import java.security.SecureRandom
 import java.util.*
 import javax.crypto.Cipher
@@ -8,22 +9,22 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
-fun String.encrypt(salt: ByteArray) = EncryptUtils(salt).encrypt(this)
-fun String.decrypt(salt: ByteArray) = EncryptUtils(salt).decrypt(this)
-internal class EncryptUtils(salt: ByteArray) {
-    private val secretKey = "flab_lolstats_testkey"
+fun String.encrypt(salt: ByteArray) = Encryption(salt).encrypt(this)
+fun String.decrypt(salt: ByteArray) = Encryption(salt).decrypt(this)
+internal class Encryption(salt: ByteArray)  {
+    private val secretKey: String =  Dotenv.load().get("SECRET_KEY")
     private val secretKeySpec: SecretKeySpec
     private val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
     private val iterationCount = 65536
     private val keyLength = 256
-
     init {
         val spec = PBEKeySpec(secretKey.toCharArray(), salt, iterationCount, keyLength)
         val tmp = factory.generateSecret(spec)
         secretKeySpec = SecretKeySpec(tmp.encoded, "AES")
     }
-
-
+    fun getAlgorithm(): String? {
+        return "AES/CBC/PKCS5PADDING"
+    }
     fun encrypt(data: String): String {
         val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
         val iv = ByteArray(cipher.blockSize)

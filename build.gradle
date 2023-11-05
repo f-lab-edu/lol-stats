@@ -23,6 +23,7 @@ buildscript {
         version_slf4j = "2.0.0"
         version_jackson = "2.13.4"
         version_jackson_kotlin = "2.13.4"
+        version_dotenv = "3.0.0"
 
         // Testing & Code quality
         version_detekt = "1.21.0"

@@ -19,8 +19,6 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import test.domain.user.aggregate.randomUser
 import java.util.*
-import kotlin.jvm.internal.Intrinsics.Kotlin
-import kotlin.math.log
 
 /**
  * @since 2021-08-10

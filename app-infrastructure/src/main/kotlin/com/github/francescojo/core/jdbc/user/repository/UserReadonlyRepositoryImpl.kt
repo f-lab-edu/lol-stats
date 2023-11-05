@@ -19,7 +19,7 @@ import com.github.francescojo.core.jdbc.user.dao.UserEntityDao as UserEntityJdbc
  */
 @Primary
 @Service(UserReadonlyRepository.NAME)
-internal class UserReadonlyRepositoryImpl(
+internal open class UserReadonlyRepositoryImpl(
     private val userEntityJdbcDao: UserEntityJdbcDao
 ) : UserReadonlyRepository {
     @VisibleForTesting
