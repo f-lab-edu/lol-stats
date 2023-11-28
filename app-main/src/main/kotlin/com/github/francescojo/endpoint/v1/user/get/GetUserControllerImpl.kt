@@ -5,6 +5,7 @@
 package com.github.francescojo.endpoint.v1.user.get
 
 import com.github.francescojo.core.domain.user.usecase.FindUserUseCase
+import com.github.francescojo.core.exception.external.WrongInputException
 import com.github.francescojo.endpoint.v1.user.GetUserController
 import com.github.francescojo.endpoint.v1.user.common.UserResponse
 import org.springframework.web.bind.annotation.RestController
@@ -19,6 +20,15 @@ internal class GetUserControllerImpl(
 ) : GetUserController {
     override fun get(id: UUID): UserResponse {
         val user = useCase.getUserById(id)
+
+        return UserResponse.from(user)
+    }
+
+    override fun login(req: GetUserRequest): UserResponse {
+        if (req.isEmpty()) {
+            throw WrongInputException("null")
+        }
+        val user = useCase.getUserByEmail(req.email!!,req.password!!)
 
         return UserResponse.from(user)
     }

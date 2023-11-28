@@ -12,4 +12,6 @@ object ApiPathsV1 {
 
     const val USERS = "$V1/users"
     const val USERS_ID = "$USERS/${ApiVariableV1.PATH_ID}"
+
+    const val USERS_LOGIN = "$V1/login"
 }
