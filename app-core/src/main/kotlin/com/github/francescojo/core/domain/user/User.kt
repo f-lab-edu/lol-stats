@@ -12,8 +12,12 @@ import java.util.*
 /**
  * @since 2021-08-10
  */
-interface User : SoftDeletable {
+interface User :  SoftDeletable {
     val id: UUID
+
+    val password: String
+
+    val role: Role
 
     val nickname: String
 
@@ -28,6 +32,8 @@ interface User : SoftDeletable {
     val lastActiveAt: Instant
 
     companion object {
+        const val LENGTH_PASSWORD_MIN = 8
+        const val LENGTH_PASSWORD_MAX = 16
         const val LENGTH_NAME_MIN = 2
         const val LENGTH_NAME_MAX = 64
         const val LENGTH_EMAIL_MAX = 64
@@ -36,6 +42,8 @@ interface User : SoftDeletable {
         @SuppressWarnings("LongParameterList")      // Intended complexity to provide various User creation cases
         fun create(
             id: UUID = UUID.randomUUID(),
+            password: String,
+            role: Role,
             nickname: String,
             email: String,
             phoneNumber: String,
@@ -55,6 +63,8 @@ interface User : SoftDeletable {
             } else null
             return UserModel.create(
                 id = id,
+                password = password,
+                role = role,
                 nickname = nickname,
                 email = email,
                 phoneNumber = phoneNumber,

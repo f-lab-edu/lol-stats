@@ -81,6 +81,8 @@ internal class UserEntityDaoImpl(
         val sql = """
             INSERT INTO `${UserEntity.TABLE}` (
                 `${UserEntity.COL_ID}`,
+                `${UserEntity.COL_PASSWORD}`,
+                `${UserEntity.COL_ROLE}`,
                 `${UserEntity.COL_NICKNAME}`,
                 `${UserEntity.COL_EMAIL}`,
                 `${UserEntity.COL_PHONE_NUMBER}`,
@@ -95,24 +97,26 @@ internal class UserEntityDaoImpl(
                 `${UserEntity.COL_VERSION}`,
                 `${UserEntity.COL_SALT}`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """.trimIndent()
 
         return userEntity.apply {
             @Suppress("MagicNumber")    // Not a magic number in this context
             seq = super.doInsertAndGetId(UserEntity.COL_SEQ, sql) {
                 setBinaryEx(1, userEntity.id.toByteArray())
-                setStringEx(2, userEntity.nickname)
-                setStringEx(3, userEntity.email)
-                setStringEx(4, userEntity.phoneNumber)
-                setStringEx(5, userEntity.zipCode)
-                setStringEx(6, userEntity.streetAdr)
-                setStringEx(7, userEntity.detailAdr)
-                setBooleanEx(8, userEntity.deleted)
-                setTimestampEx(9, userEntity.registeredAt)
-                setTimestampEx(10, userEntity.lastActiveAt)
-                setLongEx(11, userEntity.version)
-                setBinaryEx(12, userEntity.salt)
+                setStringEx(2, userEntity.password)
+                setStringEx(3, userEntity.role.name)
+                setStringEx(4, userEntity.nickname)
+                setStringEx(5, userEntity.email)
+                setStringEx(6, userEntity.phoneNumber)
+                setStringEx(7, userEntity.zipCode)
+                setStringEx(8, userEntity.streetAdr)
+                setStringEx(9, userEntity.detailAdr)
+                setBooleanEx(10, userEntity.deleted)
+                setTimestampEx(11, userEntity.registeredAt)
+                setTimestampEx(12, userEntity.lastActiveAt)
+                setLongEx(13, userEntity.version)
+                setBinaryEx(14, userEntity.salt)
             }.key!!.toLong()
         }
     }

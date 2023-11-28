@@ -5,6 +5,7 @@
 package testcase.medium.endpoint.v1.user
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.github.francescojo.core.domain.user.Role
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.exception.ErrorCodes
 import com.github.francescojo.endpoint.v1.ApiPathsV1
@@ -30,6 +31,8 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
     ) {
         // given:
         val payload = FakeCreateUserRequest(
+            password = Faker().internet().password(),
+            role = Role.USER,
             nickname = nickname,
             email = Faker().internet().emailAddress(),
             phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
@@ -53,6 +56,8 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
     ) {
         // given:
         val payload = FakeCreateUserRequest(
+            password = Faker().internet().password(),
+            role = Role.USER,
             nickname = Faker().name().fullName(),
             email = email,
             phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
@@ -76,6 +81,8 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
     ) {
         // given:
         val payload = FakeCreateUserRequest(
+            password = Faker().internet().password(),
+            role = Role.USER,
             nickname = Faker().name().fullName(),
             email = Faker().internet().emailAddress(),
             phoneNumber = phoneNumber,
@@ -93,6 +100,8 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
 
     @JsonDeserialize
     private data class FakeCreateUserRequest(
+        val password: String?,
+        val role: Role?,
         val nickname: String?,
         val email: String?,
         val phoneNumber: String?,
