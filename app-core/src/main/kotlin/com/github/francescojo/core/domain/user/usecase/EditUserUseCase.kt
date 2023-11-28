@@ -5,6 +5,7 @@
 package com.github.francescojo.core.domain.user.usecase
 
 import com.github.francescojo.core.annotation.UseCase
+import com.github.francescojo.core.domain.user.Role
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
@@ -21,6 +22,8 @@ interface EditUserUseCase {
     fun editUser(id: UUID, message: EditUserMessage): User
 
     interface EditUserMessage {
+        val password: String?
+        val role : Role?
         val nickname: String?
         val email: String?
         val phoneNumber: String?

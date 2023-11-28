@@ -8,6 +8,7 @@ import com.github.francescojo.endpoint.v1.ApiPathsV1
 import com.github.francescojo.endpoint.v1.user.common.UserResponse
 import com.github.francescojo.endpoint.v1.user.create.CreateUserRequest
 import com.github.francescojo.endpoint.v1.user.edit.EditUserRequest
+import com.github.francescojo.endpoint.v1.user.get.GetUserRequest
 import io.restassured.response.Response
 import org.springframework.restdocs.payload.FieldDescriptor
 import test.endpoint.v1.usersId
@@ -41,6 +42,21 @@ fun EndpointLargeTestBase.getUserApi(
             }
         }
         .get(ApiPathsV1.usersId(userId))
+}
+
+fun EndpointLargeTestBase.loginUserApi(
+    requestPayload: GetUserRequest,
+    requestFields: List<FieldDescriptor>? = null,
+    responseFields: List<FieldDescriptor>? = null,
+): Response {
+    return request()
+        .apply {
+            if (requestFields != null && responseFields != null) {
+                this.withDocumentation(URI.create(ApiPathsV1.USERS).toRelativePath(), requestFields, responseFields)
+            }
+        }
+        .body(requestPayload)
+        .post(ApiPathsV1.USERS_LOGIN)
 }
 
 fun EndpointLargeTestBase.editUserApi(

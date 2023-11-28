@@ -5,6 +5,7 @@
 package com.github.francescojo.core.domain.user.usecase
 
 import com.github.francescojo.core.annotation.UseCase
+import com.github.francescojo.core.domain.user.Role
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
@@ -15,9 +16,12 @@ import com.github.francescojo.core.domain.user.repository.writable.UserRepositor
  * @since 2021-08-10
  */
 interface CreateUserUseCase {
+
     fun createUser(message: CreateUserMessage): User
 
     interface CreateUserMessage {
+        val password: String
+        val role: Role
         val nickname: String
         val email: String
         val phoneNumber:String
@@ -37,7 +41,7 @@ interface CreateUserUseCase {
 
 @UseCase
 internal class CreateUserUseCaseImpl(
-    private val users: UserRepository
+    private val users: UserRepository,
 ) : CreateUserUseCase {
     override fun createUser(message: CreateUserUseCase.CreateUserMessage): User {
         users.findByNickname(message.nickname)?.let { throw SameNicknameUserAlreadyExistException(message.nickname) }
@@ -47,6 +51,8 @@ internal class CreateUserUseCaseImpl(
         }
 
         val user = User.create(
+            password = message.password,
+            role = message.role,
             nickname = message.nickname,
             email = message.email,
             phoneNumber = message.phoneNumber,

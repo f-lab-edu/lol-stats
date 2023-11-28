@@ -5,6 +5,7 @@
 package com.github.francescojo.core.domain.user.vo
 
 import com.github.francescojo.core.domain.user.Address
+import com.github.francescojo.core.domain.user.Role
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
 import java.time.Instant
@@ -17,6 +18,8 @@ import java.util.*
  */
 internal data class UserModel(
     override val id: UUID,
+    override val password: String,
+    override val role: Role,
     override val nickname: String,
     override val email: String,
     override val phoneNumber: String,
@@ -25,8 +28,11 @@ internal data class UserModel(
     override val lastActiveAt: Instant,
     override val deleted: Boolean
 ) : User {
+
     fun applyValues(values: EditUserUseCase.EditUserMessage): User = this.copy(
         nickname = values.nickname ?: this.nickname,
+        password = values.password ?: this.password,
+        role = values.role ?: this.role,
         email = values.email ?: this.email,
         phoneNumber = values.phoneNumber ?: this.phoneNumber,
         lastActiveAt = Instant.now()
@@ -41,6 +47,8 @@ internal data class UserModel(
         @SuppressWarnings("LongParameterList")      // Intended complexity to provide various User creation cases
         fun create(
             id: UUID = UUID.randomUUID(),
+            password: String,
+            role: Role,
             nickname: String,
             email: String,
             phoneNumber: String,
@@ -53,6 +61,8 @@ internal data class UserModel(
 
             return UserModel(
                 id = id,
+                password = password,
+                role = role,
                 nickname = nickname,
                 email = email,
                 phoneNumber = phoneNumber,
@@ -69,6 +79,8 @@ internal data class UserModel(
             with(user) {
                 create(
                     id = id,
+                    password = password,
+                    role = role,
                     nickname = nickname,
                     email = email,
                     phoneNumber = phoneNumber,

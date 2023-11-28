@@ -7,6 +7,7 @@ package com.github.francescojo.core.jdbc.user
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.jdbc.JdbcTemplateHelper
 import com.github.francescojo.core.decrypt
+import com.github.francescojo.core.domain.user.Role
 import com.github.francescojo.core.encrypt
 import com.github.francescojo.lib.util.toUUID
 import java.security.SecureRandom
@@ -19,8 +20,11 @@ import java.util.*
  *
  * @since 2021-08-10
  */
+@SuppressWarnings("LongParameterList")      // Intended complexity to provide various User creation cases
 internal class UserEntity(
     val id: UUID,
+    val password: String,
+    val role: Role,
     var nickname: String,
     var email: String,
     var phoneNumber: String,
@@ -41,6 +45,8 @@ internal class UserEntity(
 
     fun toUser(): User = User.create(
         id = this.id,
+        password = this.password,
+        role = this.role,
         nickname = this.nickname,
         email = this.email.decrypt(salt),
         phoneNumber = this.phoneNumber.decrypt(salt),
@@ -65,6 +71,8 @@ internal class UserEntity(
 
         const val COL_SEQ = "seq"
         const val COL_ID = "id"
+        const val COL_PASSWORD = "password"
+        const val COL_ROLE = "role"
         const val COL_NICKNAME = "nickname"
         const val COL_EMAIL = "email"
         const val COL_PHONE_NUMBER = "phone_number"
@@ -81,6 +89,8 @@ internal class UserEntity(
             val newSalt = ByteArray(SALT_LENGTH).apply { SecureRandom().nextBytes(this) }
             UserEntity(
                 id = id,
+                password = password,
+                role = role,
                 nickname = nickname,
                 email = email.encrypt(newSalt),
                 phoneNumber = phoneNumber.encrypt(newSalt),
@@ -101,6 +111,8 @@ internal class UserEntity(
         ) = with(deserialisationContext) {
             UserEntity(
                 id = (map[prefix + COL_ID] as ByteArray).toUUID(),
+                password = map[prefix + COL_PASSWORD] as String,
+                role = Role.valueOf((map[prefix + COL_ROLE] as String).uppercase()),
                 nickname = map[prefix + COL_NICKNAME] as String,
                 email = (map[prefix + COL_EMAIL] as String).encrypt(map[prefix + COL_SALT] as ByteArray),
                 phoneNumber = (map[prefix + COL_PHONE_NUMBER] as String).encrypt(map[prefix + COL_SALT] as ByteArray),
