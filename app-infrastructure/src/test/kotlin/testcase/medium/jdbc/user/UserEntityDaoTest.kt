@@ -40,7 +40,21 @@ class UserEntityDaoTest : JdbcTemplateMediumTestBase() {
         assertThat(foundUser, `is`(savedUser))
     }
 
+    @DisplayName("복호화 테스트")
+    @Test
+    fun decryptTest() {
+        // given:
+        val email = Faker().internet().safeEmailAddress()
 
+        //when
+        val randomUser = randomUserEntity(email = email)
+
+        // then:
+        val decrypt = randomUser.toUser()
+
+        // expect:
+        assertThat(email, `is`(decrypt.email))
+    }
     @DisplayName("Changes in entity must be persisted")
     @Test
     fun updateTest() {
@@ -59,7 +73,7 @@ class UserEntityDaoTest : JdbcTemplateMediumTestBase() {
         val updatedUser = sut.update(foundUser.id, foundUser)
 
         // then:
-        val retrievedUser = sut.selectById(updatedUser.id)!!
+        val retrievedUser = sut.selectById(updatedUser.id)!!.toUser()
 
         // expect:
         assertAll(

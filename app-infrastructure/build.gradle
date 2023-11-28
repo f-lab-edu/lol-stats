@@ -28,6 +28,10 @@ dependencies {
     // Infrastructure
     implementation "com.zaxxer:HikariCP:$version_hikariCP"
     implementation "org.mariadb.jdbc:mariadb-java-client:$version_mariadb"
+
+    //DotEnv
+    implementation "io.github.cdimascio:dotenv-java:$version_dotenv"
+
     // endregion
 
     // region test dependencies
