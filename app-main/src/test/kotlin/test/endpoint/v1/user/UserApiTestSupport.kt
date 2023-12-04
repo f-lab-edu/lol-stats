@@ -52,7 +52,7 @@ fun EndpointLargeTestBase.loginUserApi(
     return request()
         .apply {
             if (requestFields != null && responseFields != null) {
-                this.withDocumentation(URI.create(ApiPathsV1.USERS).toRelativePath(), requestFields, responseFields)
+                this.withDocumentation(URI.create(ApiPathsV1.USERS_LOGIN).toRelativePath(), requestFields, responseFields)
             }
         }
         .body(requestPayload)

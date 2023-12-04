@@ -6,12 +6,10 @@ package com.github.francescojo.appconfig.bean
 
 import com.github.francescojo.core.domain.user.repository.UserReadonlyRepository
 import com.github.francescojo.core.domain.user.repository.writable.UserRepository
-import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
-import com.github.francescojo.core.domain.user.usecase.DeleteUserUseCase
-import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
-import com.github.francescojo.core.domain.user.usecase.FindUserUseCase
+import com.github.francescojo.core.domain.user.usecase.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+
 
 /**
  * @since 2021-08-10
@@ -21,8 +19,10 @@ class UserBeans {
     @Bean
     fun createUserUseCase(
         userRepository: UserRepository,
+        passwordEncoderService: PasswordEncoderService,
     ) = CreateUserUseCase.newInstance(
-        userRepository
+        userRepository,
+        passwordEncoderService
     )
 
     @Bean

@@ -6,6 +6,7 @@ package com.github.francescojo.endpoint.v1.user
 
 import com.github.francescojo.endpoint.v1.ApiPathsV1
 import com.github.francescojo.endpoint.v1.ApiVariableV1
+import com.github.francescojo.endpoint.v1.user.common.AuthenticationResponse
 import com.github.francescojo.endpoint.v1.user.common.UserResponse
 import com.github.francescojo.endpoint.v1.user.get.GetUserRequest
 import org.springframework.http.MediaType
@@ -41,5 +42,5 @@ interface GetUserController {
         method = [RequestMethod.POST],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun login(@RequestBody req: GetUserRequest): UserResponse
+    fun login(@RequestBody req: GetUserRequest): AuthenticationResponse
 }

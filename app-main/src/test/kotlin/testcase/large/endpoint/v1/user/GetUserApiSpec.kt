@@ -5,8 +5,11 @@
 package testcase.large.endpoint.v1.user
 
 import com.github.francescojo.core.exception.ErrorCodes
+import com.github.francescojo.endpoint.v1.user.common.AuthenticationResponse
 import com.github.francescojo.endpoint.v1.user.common.UserResponse
+import com.github.francescojo.endpoint.v1.user.create.CreateUserRequest
 import com.github.francescojo.endpoint.v1.user.get.GetUserRequest
+import com.github.francescojo.lib.jwt.JwtTokenUtil
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.DisplayName
@@ -51,9 +54,17 @@ class GetUserApiSpec : EndpointLargeTestBase() {
     @DisplayName("Email 로 신원 조회")
     @Test
     fun userInfoByEmailNotFound() {
+        // given:
+        val password = "123456"
+        val user = createRandomUser(CreateUserRequest.random(password = password))
+
+        // then:
+        val userInfo = loginUserApi(GetUserRequest(
+            user.email,
+            password,
+        )).expect2xx(AuthenticationResponse::class)
+
         // expect:
-        loginUserApi(GetUserRequest.random())
-            .expect4xx(HttpStatus.NOT_FOUND)
-            .withExceptionCode(ErrorCodes.USER_BY_ID_NOT_FOUND)
+        assertThat(JwtTokenUtil().extractUsername(userInfo.accessToken), `is`(user.email))
     }
 }
