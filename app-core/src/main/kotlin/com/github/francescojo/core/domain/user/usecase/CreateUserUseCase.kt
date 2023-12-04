@@ -46,9 +46,9 @@ internal class CreateUserUseCaseImpl(
     override fun createUser(message: CreateUserUseCase.CreateUserMessage): User {
         users.findByNickname(message.nickname)?.let { throw SameNicknameUserAlreadyExistException(message.nickname) }
         users.findByEmail(message.email)?.let { throw SameEmailUserAlreadyExistException(message.email) }
-        users.findByPhoneNumber(message.phoneNumber)?.let {
-            throw SamePhoneNumberUserAlreadyExistException(message.phoneNumber)
-        }
+//        users.findByPhoneNumber(message.phoneNumber)?.let {
+//            throw SamePhoneNumberUserAlreadyExistException(message.phoneNumber)
+//        }
 
         val user = User.create(
             password = message.password,

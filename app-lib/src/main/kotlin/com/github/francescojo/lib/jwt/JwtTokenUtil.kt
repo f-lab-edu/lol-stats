@@ -12,18 +12,18 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import javax.crypto.SecretKey
 
+
+private const val JWT_EXPIRATION = 86400000L
+private const val REFRESH_JWT_EXPIRATION = 604800000L
 @Service
 @SuppressWarnings("TooManyFunctions")
 class JwtTokenUtil {
 
-    @Value("\${application.security.jwt.secret-key}")
-    private val secretKey: String? = null
+    private val secretKey: String? = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
 
-    @Value("\${application.security.jwt.expiration}")
-    private val jwtExpiration: Long = 0
+    private val jwtExpiration: Long = JWT_EXPIRATION
 
-    @Value("\${application.security.jwt.refresh-token.expiration}")
-    private val refreshExpiration: Long = 0
+    private val refreshExpiration: Long = REFRESH_JWT_EXPIRATION
 
     fun extractUsername(token: String?): String {
         return extractClaim(token) { obj: Claims -> obj.subject }

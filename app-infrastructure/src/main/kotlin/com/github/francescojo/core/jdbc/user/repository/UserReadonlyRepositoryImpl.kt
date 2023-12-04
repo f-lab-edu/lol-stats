@@ -31,8 +31,8 @@ internal open class UserReadonlyRepositoryImpl(
     @VisibleForTesting
     val emailToUserCache = FastCollectedLruCache.create<String, User>(CACHE_CAPACITY)
 
-    @VisibleForTesting
-    val phoneNumberToUserCache = FastCollectedLruCache.create<String, User>(CACHE_CAPACITY)
+//    @VisibleForTesting
+//    val phoneNumberToUserCache = FastCollectedLruCache.create<String, User>(CACHE_CAPACITY)
 
     override fun findByUuid(uuid: UUID): User? =
         idToUserCache.get(uuid) ?: userEntityJdbcDao.selectById(uuid)?.let { updateCache(it) }
@@ -43,9 +43,9 @@ internal open class UserReadonlyRepositoryImpl(
     override fun findByEmail(email: String): User? =
         (emailToUserCache.get(email) ?: userEntityJdbcDao.selectByEmail(email)?.let { updateCache(it) })
 
-    override fun findByPhoneNumber(phoneNumber: String): User? =
-        (phoneNumberToUserCache.get(phoneNumber)
-            ?: userEntityJdbcDao.selectByPhoneNumber(phoneNumber)?.let { updateCache(it) })
+//    override fun findByPhoneNumber(phoneNumber: String): User? =
+//        (phoneNumberToUserCache.get(phoneNumber)
+//            ?: userEntityJdbcDao.selectByPhoneNumber(phoneNumber)?.let { updateCache(it) })
 
     internal fun updateCache(userEntity: UserEntity): User {
         val user = userEntity.toUser()
@@ -53,7 +53,7 @@ internal open class UserReadonlyRepositoryImpl(
         idToUserCache.put(user.id, user)
         nicknameToUserCache.put(user.nickname, user)
         emailToUserCache.put(user.email, user)
-        phoneNumberToUserCache.put(user.phoneNumber, user)
+//        phoneNumberToUserCache.put(user.phoneNumber, user)
 
         return user
     }

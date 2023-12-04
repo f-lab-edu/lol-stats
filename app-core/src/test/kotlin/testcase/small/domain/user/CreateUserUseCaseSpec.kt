@@ -82,16 +82,16 @@ class CreateUserUseCaseSpec {
         assertThrows<SameEmailUserAlreadyExistException> { sut.createUser(message) }
     }
 
-    @DisplayName("PhoneNumber must not be duplicated")
-    @Test
-    fun errorIfPhoneNumberIsDuplicated() {
-        // given:
-        val message = randomCreateUserMessage()
-
-        // and:
-        `when`(userRepository.findByPhoneNumber(message.phoneNumber)).thenReturn(randomUser(phoneNumber = message.phoneNumber))
-
-        // then:
-        assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.createUser(message) }
-    }
+//    @DisplayName("PhoneNumber must not be duplicated")
+//    @Test
+//    fun errorIfPhoneNumberIsDuplicated() {
+//        // given:
+//        val message = randomCreateUserMessage()
+//
+//        // and:
+//        `when`(userRepository.findByPhoneNumber(message.phoneNumber)).thenReturn(randomUser(phoneNumber = message.phoneNumber))
+//
+//        // then:
+//        assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.createUser(message) }
+//    }
 }
