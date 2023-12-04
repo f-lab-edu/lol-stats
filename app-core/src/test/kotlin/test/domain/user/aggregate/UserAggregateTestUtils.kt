@@ -10,15 +10,12 @@ import com.github.javafaker.Faker
 import java.time.Instant
 import java.util.*
 
-object FakerInstance {
-    val instance: Faker = Faker()
-}
 fun randomUser(
     id: UUID = UUID.randomUUID(),
-    password: String = FakerInstance.instance.internet().password(),
+    password: String = Faker().internet().password(),
     role: Role = Role.USER,
-    nickname: String = FakerInstance.instance.name().fullName(),
-    email: String = FakerInstance.instance.internet().emailAddress(),
+    nickname: String = Faker().name().fullName(),
+    email: String = Faker().internet().emailAddress(),
     phoneNumber: String = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
     registeredAt: Instant = Instant.now(),
     lastActiveAt: Instant = Instant.now(),
