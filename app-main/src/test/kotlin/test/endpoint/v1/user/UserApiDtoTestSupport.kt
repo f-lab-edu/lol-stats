@@ -10,15 +10,18 @@ import com.github.francescojo.endpoint.v1.user.edit.EditUserRequest
 import com.github.francescojo.endpoint.v1.user.get.GetUserRequest
 import com.github.javafaker.Faker
 import java.util.*
+object FakerInstance {
+    val instance: Faker = Faker()
+}
 fun CreateUserRequest.Companion.random(
-    password: String = Faker().internet().password(),
+    password: String = FakerInstance.instance.internet().password(),
     role: Role = Role.USER,
-    nickname: String = Faker().name().fullName(),
-    email: String = Faker().internet().emailAddress(),
-    phoneNumber: String = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
-    zipCode: String = Faker().address().zipCode(),
-    streetAdr: String = Faker().address().streetAddress(),
-    detailAdr: String = Faker().address().secondaryAddress(),
+    nickname: String = FakerInstance.instance.name().fullName(),
+    email: String = FakerInstance.instance.internet().emailAddress(),
+    phoneNumber: String = FakerInstance.instance.phoneNumber().phoneNumber(),
+    zipCode: String = FakerInstance.instance.address().zipCode(),
+    streetAdr: String = FakerInstance.instance.address().streetAddress(),
+    detailAdr: String = FakerInstance.instance.address().secondaryAddress(),
 ) = CreateUserRequest(
     password = password,
     role = role,
@@ -31,11 +34,11 @@ fun CreateUserRequest.Companion.random(
 )
 
 fun EditUserRequest.Companion.random(
-    password: String? = Faker().internet().password(),
+    password: String? = FakerInstance.instance.internet().password(),
     role: Role? = Role.values().random(),
-    nickname: String? = Faker().name().fullName(),
-    email: String? = Faker().internet().emailAddress(),
-    phoneNumber: String? = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
+    nickname: String? = FakerInstance.instance.name().fullName(),
+    email: String? = FakerInstance.instance.internet().emailAddress(),
+    phoneNumber: String? = FakerInstance.instance.phoneNumber().phoneNumber(),
 ) = EditUserRequest(
     password = password,
     role = role,
@@ -46,8 +49,8 @@ fun EditUserRequest.Companion.random(
 
 
 fun GetUserRequest.Companion.random(
-    email: String = Faker().internet().emailAddress(),
-    password: String = Faker().internet().password(),
+    email: String = FakerInstance.instance.internet().emailAddress(),
+    password: String = FakerInstance.instance.internet().password(),
 ) = GetUserRequest(
     email = email,
     password = password,
