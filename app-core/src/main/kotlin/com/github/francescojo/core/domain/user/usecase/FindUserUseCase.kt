@@ -27,13 +27,7 @@ interface FindUserUseCase {
 
     fun findUserByEmail(email: String): User?
 
-    fun getUserByEmail(email: String, password: String): User = findUserByEmail(email, password)
-        ?: throw UserByEmailNotFoundException(email)
-
     fun findUserByEmail(email: String, password: String): User?
-
-
-
     companion object {
         fun newInstance(
             userReadonlyRepository: UserReadonlyRepository

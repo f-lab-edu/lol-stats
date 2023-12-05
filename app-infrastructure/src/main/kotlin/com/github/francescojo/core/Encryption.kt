@@ -11,20 +11,23 @@ import javax.crypto.spec.SecretKeySpec
 
 fun String.encrypt(salt: ByteArray) = Encryption(salt).encrypt(this)
 fun String.decrypt(salt: ByteArray) = Encryption(salt).decrypt(this)
+
+private const val ITERATION_COUNT = 65536
+private const val KEY_LENGTH = 256
 internal class Encryption(salt: ByteArray)  {
     private val secretKey: String =  Dotenv.load().get("SECRET_KEY")
     private val secretKeySpec: SecretKeySpec
     private val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-    private val iterationCount = 65536
-    private val keyLength = 256
+    private val iterationCount: Int = ITERATION_COUNT
+    private val keyLength: Int = KEY_LENGTH
     init {
         val spec = PBEKeySpec(secretKey.toCharArray(), salt, iterationCount, keyLength)
         val tmp = factory.generateSecret(spec)
         secretKeySpec = SecretKeySpec(tmp.encoded, "AES")
     }
-    fun getAlgorithm(): String? {
-        return "AES/CBC/PKCS5PADDING"
-    }
+//    fun getAlgorithm(): String? {
+//        return "AES/CBC/PKCS5PADDING"
+//    }
     fun encrypt(data: String): String {
         val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
         val iv = ByteArray(cipher.blockSize)

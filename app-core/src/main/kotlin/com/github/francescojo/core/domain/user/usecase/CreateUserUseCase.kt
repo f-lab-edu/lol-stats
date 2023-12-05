@@ -9,7 +9,6 @@ import com.github.francescojo.core.domain.user.Role
 import com.github.francescojo.core.domain.user.User
 import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
-import com.github.francescojo.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException
 import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 
 /**
@@ -32,9 +31,11 @@ interface CreateUserUseCase {
 
     companion object {
         fun newInstance(
-            userRepository: UserRepository
+            userRepository: UserRepository,
+            passwordEncoderService: PasswordEncoderService
         ): CreateUserUseCase = CreateUserUseCaseImpl(
-            userRepository
+            userRepository,
+            passwordEncoderService
         )
     }
 }
@@ -42,16 +43,17 @@ interface CreateUserUseCase {
 @UseCase
 internal class CreateUserUseCaseImpl(
     private val users: UserRepository,
+    private val passwordEncoderService: PasswordEncoderService,
 ) : CreateUserUseCase {
     override fun createUser(message: CreateUserUseCase.CreateUserMessage): User {
         users.findByNickname(message.nickname)?.let { throw SameNicknameUserAlreadyExistException(message.nickname) }
         users.findByEmail(message.email)?.let { throw SameEmailUserAlreadyExistException(message.email) }
-        users.findByPhoneNumber(message.phoneNumber)?.let {
-            throw SamePhoneNumberUserAlreadyExistException(message.phoneNumber)
-        }
-
+//        users.findByPhoneNumber(message.phoneNumber)?.let {
+//            throw SamePhoneNumberUserAlreadyExistException(message.phoneNumber)
+//        }
+        val hashPassword = passwordEncoderService.encode(message.password)
         val user = User.create(
-            password = message.password,
+            password = hashPassword,
             role = message.role,
             nickname = message.nickname,
             email = message.email,
@@ -63,4 +65,7 @@ internal class CreateUserUseCaseImpl(
 
         return users.save(user)
     }
+}
+interface PasswordEncoderService {
+    fun encode(password: String): String
 }

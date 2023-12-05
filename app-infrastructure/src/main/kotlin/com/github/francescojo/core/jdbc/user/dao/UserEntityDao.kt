@@ -22,7 +22,7 @@ internal interface UserEntityDao {
 
     fun selectByEmail(email: String): UserEntity?
 
-    fun selectByPhoneNumber(phoneNumber: String): UserEntity?
+//    fun selectByPhoneNumber(phoneNumber: String): UserEntity?
 
     fun insert(userEntity: UserEntity): UserEntity
 
@@ -66,16 +66,16 @@ internal class UserEntityDaoImpl(
         return selectOne(sql, email)
     }
 
-    override fun selectByPhoneNumber(phoneNumber: String): UserEntity? {
-        val sql = """
-            SELECT *
-            FROM `${UserEntity.TABLE}` u
-            WHERE u.`${UserEntity.COL_PHONE_NUMBER}` = ?
-              AND u.`${UserEntity.COL_DELETED}` = FALSE
-        """.trimIndent()
-
-        return selectOne(sql, phoneNumber)
-    }
+//    override fun selectByPhoneNumber(phoneNumber: String): UserEntity? {
+//        val sql = """
+//            SELECT *
+//            FROM `${UserEntity.TABLE}` u
+//            WHERE u.`${UserEntity.COL_PHONE_NUMBER}` = ?
+//              AND u.`${UserEntity.COL_DELETED}` = FALSE
+//        """.trimIndent()
+//
+//        return selectOne(sql, phoneNumber)
+//    }
 
     override fun insert(userEntity: UserEntity): UserEntity {
         val sql = """

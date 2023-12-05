@@ -10,15 +10,18 @@ import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
 import com.github.javafaker.Faker
 import java.util.*
 
+object FakerInstance {
+    val instance: Faker = Faker()
+}
 fun randomCreateUserMessage(
-    password: String = Faker().internet().password(),
+    password: String = FakerInstance.instance.internet().password(),
     role: Role = Role.values().random(),
-    nickname: String = Faker().name().fullName(),
-    email: String = Faker().internet().emailAddress(),
+    nickname: String = FakerInstance.instance.name().fullName(),
+    email: String = FakerInstance.instance.internet().emailAddress(),
     phoneNumber: String = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
-    zipCode: String = Faker().address().zipCode(),
-    streetAdr: String = Faker().address().streetAddress(),
-    detailAdr: String = Faker().address().secondaryAddress(),
+    zipCode: String = FakerInstance.instance.address().zipCode(),
+    streetAdr: String = FakerInstance.instance.address().streetAddress(),
+    detailAdr: String = FakerInstance.instance.address().secondaryAddress(),
 ): CreateUserUseCase.CreateUserMessage {
     data class FakeCreateUserMessage(
         override val password: String,
@@ -44,10 +47,10 @@ fun randomCreateUserMessage(
 }
 
 fun randomEditUserMessage(
-    password: String? = Faker().internet().password(),
+    password: String? = FakerInstance.instance.internet().password(),
     role: Role? = Role.values().random(),
-    nickname: String? = Faker().name().fullName(),
-    email: String? = Faker().internet().emailAddress(),
+    nickname: String? = FakerInstance.instance.name().fullName(),
+    email: String? = FakerInstance.instance.internet().emailAddress(),
     phoneNumber: String? = Faker(Locale.KOREAN).phoneNumber().phoneNumber()
 ): EditUserUseCase.EditUserMessage {
     data class FakeEditUserMessage(

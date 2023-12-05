@@ -5,6 +5,13 @@ jar {
 }
 
 dependencies {
+    // Spring dependencies
+    implementation "org.springframework.boot:spring-boot-starter:$version_springBoot"
+    implementation "org.springframework.boot:spring-boot-starter-security:$version_springBoot"
+
     // Third party deps
     implementation "org.slf4j:slf4j-api:$version_slf4j"
+    implementation "io.jsonwebtoken:jjwt-api:$version_jjwt"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:$version_jjwt"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:$version_jjwt"
 }

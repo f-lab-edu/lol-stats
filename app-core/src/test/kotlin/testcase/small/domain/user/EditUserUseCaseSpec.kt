@@ -117,18 +117,18 @@ class EditUserUseCaseSpec {
             assertThrows<SameEmailUserAlreadyExistException> { sut.editUser(id, message) }
         }
 
-        @DisplayName("PhoneNumber is duplicated")
-        @Test
-        fun errorIfPhoneNumberIsDuplicated() {
-            // given:
-            val samePhoneNumberUser = randomUser(id = id, phoneNumber = message.phoneNumber!!)
-
-            // and:
-            `when`(userRepository.findByPhoneNumber(message.phoneNumber!!)).thenReturn(samePhoneNumberUser)
-
-            // then:
-            assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.editUser(id, message) }
-        }
+//        @DisplayName("PhoneNumber is duplicated")
+//        @Test
+//        fun errorIfPhoneNumberIsDuplicated() {
+//            // given:
+//            val samePhoneNumberUser = randomUser(id = id, phoneNumber = message.phoneNumber!!)
+//
+//            // and:
+//            `when`(userRepository.findByPhoneNumber(message.phoneNumber!!)).thenReturn(samePhoneNumberUser)
+//
+//            // then:
+//            assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.editUser(id, message) }
+//        }
     }
 
     @DisplayName("Some field is preserved if:")

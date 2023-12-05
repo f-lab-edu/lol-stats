@@ -24,6 +24,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation:$version_springBoot"
     implementation "org.springframework.boot:spring-boot-starter-jdbc:$version_springBoot"
     implementation "org.springframework.boot:spring-boot-starter-logging:$version_springBoot"
+    implementation "org.springframework.boot:spring-boot-starter-security:$version_springBoot"
 
     // Infrastructure
     implementation "com.zaxxer:HikariCP:$version_hikariCP"

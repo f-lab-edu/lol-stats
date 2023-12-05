@@ -25,6 +25,10 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter:$version_springBoot"
     implementation "org.springframework.boot:spring-boot-starter-validation:$version_springBoot"
     implementation "org.springframework.boot:spring-boot-starter-jdbc:$version_springBoot"
+    implementation "org.springframework.boot:spring-boot-starter-security:$version_springBoot"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server:$version_springBoot"
+
+
 
     // Spring Web
     implementation("org.springframework.boot:spring-boot-starter-web:$version_springBoot")

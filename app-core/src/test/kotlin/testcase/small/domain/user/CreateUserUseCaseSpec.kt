@@ -6,13 +6,14 @@ package testcase.small.domain.user
 
 import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
-import com.github.francescojo.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException
 import com.github.francescojo.core.domain.user.repository.writable.UserRepository
 import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
+import com.github.francescojo.core.domain.user.usecase.PasswordEncoderService
 import com.github.francescojo.lib.annotation.SmallTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
@@ -27,11 +28,18 @@ import java.util.*
 class CreateUserUseCaseSpec {
     private lateinit var sut: CreateUserUseCase
     private lateinit var userRepository: UserRepository
+    private lateinit var passwordEncoderService: PasswordEncoderService
 
     @BeforeEach
     fun setup() {
         userRepository = mock()
-        sut = CreateUserUseCase.newInstance(userRepository)
+        passwordEncoderService = mock()
+        `when`(passwordEncoderService.encode(anyString())).thenReturn("encodedPassword")
+
+        sut = CreateUserUseCase.newInstance(
+            userRepository,
+            passwordEncoderService
+        )
 
         `when`(userRepository.save(any())).thenAnswer { return@thenAnswer it.arguments[0] }
     }
@@ -82,16 +90,16 @@ class CreateUserUseCaseSpec {
         assertThrows<SameEmailUserAlreadyExistException> { sut.createUser(message) }
     }
 
-    @DisplayName("PhoneNumber must not be duplicated")
-    @Test
-    fun errorIfPhoneNumberIsDuplicated() {
-        // given:
-        val message = randomCreateUserMessage()
-
-        // and:
-        `when`(userRepository.findByPhoneNumber(message.phoneNumber)).thenReturn(randomUser(phoneNumber = message.phoneNumber))
-
-        // then:
-        assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.createUser(message) }
-    }
+//    @DisplayName("PhoneNumber must not be duplicated")
+//    @Test
+//    fun errorIfPhoneNumberIsDuplicated() {
+//        // given:
+//        val message = randomCreateUserMessage()
+//
+//        // and:
+//        `when`(userRepository.findByPhoneNumber(message.phoneNumber)).thenReturn(randomUser(phoneNumber = message.phoneNumber))
+//
+//        // then:
+//        assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.createUser(message) }
+//    }
 }

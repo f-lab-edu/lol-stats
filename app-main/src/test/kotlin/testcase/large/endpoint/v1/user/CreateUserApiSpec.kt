@@ -31,9 +31,11 @@ class CreateUserApiSpec : EndpointLargeTestBase() {
             request,
             requestFields = null,
             responseFields = null
-        ).expect2xx(UserResponse::class)
+        )
+        println(response.body.print())
+
         // expect:
-        assertThat(response, isReflecting = request)
+        assertThat(response.expect2xx(UserResponse::class), isReflecting = request)
     }
 
     @DisplayName("Cannot create user if:")

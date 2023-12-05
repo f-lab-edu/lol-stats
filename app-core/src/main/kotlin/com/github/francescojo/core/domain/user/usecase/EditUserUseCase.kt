@@ -51,9 +51,9 @@ internal class EditUserUseCaseImpl(
         message.email.takeIf { !it.isNullOrEmpty() }?.let { email ->
             users.findByEmail(email)?.let { throw SameEmailUserAlreadyExistException(email) }
         }
-        message.phoneNumber.takeIf { !it.isNullOrEmpty() }?.let { phoneNumber ->
-            users.findByPhoneNumber(phoneNumber)?.let { throw SamePhoneNumberUserAlreadyExistException(phoneNumber) }
-        }
+//        message.phoneNumber.takeIf { !it.isNullOrEmpty() }?.let { phoneNumber ->
+//            users.findByPhoneNumber(phoneNumber)?.let { throw SamePhoneNumberUserAlreadyExistException(phoneNumber) }
+//        }
 
         return users.save(UserModel.from(existingUser).applyValues(message))
     }

@@ -24,6 +24,7 @@ buildscript {
         version_jackson = "2.13.4"
         version_jackson_kotlin = "2.13.4"
         version_dotenv = "3.0.0"
+        version_jjwt = "0.12.3"
 
         // Testing & Code quality
         version_detekt = "1.21.0"

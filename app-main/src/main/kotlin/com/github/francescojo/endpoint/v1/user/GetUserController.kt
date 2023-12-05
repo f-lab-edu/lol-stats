@@ -6,9 +6,12 @@ package com.github.francescojo.endpoint.v1.user
 
 import com.github.francescojo.endpoint.v1.ApiPathsV1
 import com.github.francescojo.endpoint.v1.ApiVariableV1
+import com.github.francescojo.endpoint.v1.user.common.AuthenticationResponse
 import com.github.francescojo.endpoint.v1.user.common.UserResponse
+import com.github.francescojo.endpoint.v1.user.get.GetUserRequest
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import java.util.*
@@ -23,7 +26,9 @@ import java.util.*
  * @since 2021-08-10
  */
 @RequestMapping(
-    produces = [MediaType.APPLICATION_JSON_VALUE]
+    produces = [MediaType.APPLICATION_JSON_VALUE],
+    consumes = [MediaType.APPLICATION_JSON_VALUE]
+
 )
 interface GetUserController {
     @RequestMapping(
@@ -31,4 +36,11 @@ interface GetUserController {
         method = [RequestMethod.GET]
     )
     fun get(@PathVariable(ApiVariableV1.ID) id: UUID): UserResponse
+
+    @RequestMapping(
+        path = [ApiPathsV1.USERS_LOGIN],
+        method = [RequestMethod.POST],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun login(@RequestBody req: GetUserRequest): AuthenticationResponse
 }
