@@ -4,15 +4,15 @@
  */
 package testcase.medium
 
-import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
-import com.github.francescojo.core.domain.user.usecase.DeleteUserUseCase
-import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
-import com.github.francescojo.core.domain.user.usecase.FindUserUseCase
-import com.github.francescojo.endpoint.health.HealthControllerImpl
-import com.github.francescojo.endpoint.v1.user.create.CreateUserControllerImpl
-import com.github.francescojo.endpoint.v1.user.delete.DeleteUserControllerImpl
-import com.github.francescojo.endpoint.v1.user.edit.EditUserControllerImpl
-import com.github.francescojo.endpoint.v1.user.get.GetUserControllerImpl
+import com.github.lolstats.core.domain.user.usecase.CreateUserUseCase
+import com.github.lolstats.core.domain.user.usecase.DeleteUserUseCase
+import com.github.lolstats.core.domain.user.usecase.EditUserUseCase
+import com.github.lolstats.core.domain.user.usecase.FindUserUseCase
+import com.github.lolstats.endpoint.health.HealthControllerImpl
+import com.github.lolstats.endpoint.v1.user.create.CreateUserControllerImpl
+import com.github.lolstats.endpoint.v1.user.delete.DeleteUserControllerImpl
+import com.github.lolstats.endpoint.v1.user.edit.EditUserControllerImpl
+import com.github.lolstats.endpoint.v1.user.get.GetUserControllerImpl
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.bind.annotation.RestController
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController
 )
 class ControllerMediumTestBase : MockMvcMediumTestBase() {
     @MockBean
-    protected lateinit var createUserUseCase: CreateUserUseCase
+    protected lateinit var createUserUseCase: _root_ide_package_.com.github.lolstats.core.domain.user.usecase.CreateUserUseCase
 
     @MockBean
     protected lateinit var findUserUseCase: FindUserUseCase

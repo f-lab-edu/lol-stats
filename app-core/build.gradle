@@ -11,4 +11,7 @@ dependencies {
     // region test dependencies
     testImplementation project(path: ":${MODULE_LIB}", configuration: "testArtifacts")
     // endregion
+
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
 }

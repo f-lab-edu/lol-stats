@@ -4,7 +4,7 @@
  */
 package test.domain.user.aggregate
 
-import com.github.francescojo.core.domain.user.User
+import com.github.lolstats.core.domain.user.User
 import com.github.javafaker.Faker
 import java.time.Instant
 import java.util.*
@@ -17,7 +17,7 @@ fun randomUser(
     registeredAt: Instant = Instant.now(),
     lastActiveAt: Instant = Instant.now(),
     deleted: Boolean = false
-) = User.create(
+) = com.github.lolstats.core.domain.user.User.create(
     id = id,
     nickname = nickname,
     email = email,

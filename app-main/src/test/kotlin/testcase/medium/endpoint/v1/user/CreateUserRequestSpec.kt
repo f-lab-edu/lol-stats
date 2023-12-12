@@ -5,9 +5,9 @@
 package testcase.medium.endpoint.v1.user
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.github.francescojo.core.domain.user.User
-import com.github.francescojo.core.exception.ErrorCodes
-import com.github.francescojo.endpoint.v1.ApiPathsV1
+import com.github.lolstats.core.domain.user.User
+import com.github.lolstats.core.exception.ErrorCodes
+import com.github.lolstats.endpoint.v1.ApiPathsV1
 import com.github.javafaker.Faker
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -102,12 +102,12 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
         @JvmStatic
         fun badNicknames(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                "shorter than ${User.LENGTH_NAME_MIN}",
-                Faker().letterify("?").repeat(User.LENGTH_NAME_MIN - 1),
+                "shorter than ${com.github.lolstats.core.domain.user.User.LENGTH_NAME_MIN}",
+                Faker().letterify("?").repeat(com.github.lolstats.core.domain.user.User.LENGTH_NAME_MIN - 1),
             ),
             Arguments.of(
-                "longer than ${User.LENGTH_NAME_MAX}",
-                Faker().letterify("?").repeat(User.LENGTH_NAME_MAX + 1),
+                "longer than ${com.github.lolstats.core.domain.user.User.LENGTH_NAME_MAX}",
+                Faker().letterify("?").repeat(com.github.lolstats.core.domain.user.User.LENGTH_NAME_MAX + 1),
             )
         )
 
@@ -122,8 +122,8 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
                 Faker().lorem().word(),
             ),
             Arguments.of(
-                "longer than ${User.LENGTH_EMAIL_MAX}",
-                Faker().letterify("?").repeat(User.LENGTH_EMAIL_MAX + 1) + "@company.com",
+                "longer than ${com.github.lolstats.core.domain.user.User.LENGTH_EMAIL_MAX}",
+                Faker().letterify("?").repeat(com.github.lolstats.core.domain.user.User.LENGTH_EMAIL_MAX + 1) + "@company.com",
             )
         )
 
@@ -138,8 +138,8 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
                 Faker(Locale.US).phoneNumber().phoneNumber(),
             ),
             Arguments.of(
-                "longer than ${User.LENGTH_PHONE_NUMBER_MAX}",
-                Faker().letterify("?").repeat(User.LENGTH_PHONE_NUMBER_MAX + 1),
+                "longer than ${com.github.lolstats.core.domain.user.User.LENGTH_PHONE_NUMBER_MAX}",
+                Faker().letterify("?").repeat(com.github.lolstats.core.domain.user.User.LENGTH_PHONE_NUMBER_MAX + 1),
             )
         )
     }
