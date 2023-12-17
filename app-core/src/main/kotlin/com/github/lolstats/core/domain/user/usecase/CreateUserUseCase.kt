@@ -8,6 +8,7 @@ import com.github.lolstats.core.annotation.UseCase
 import com.github.lolstats.core.domain.user.User
 import com.github.lolstats.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.lolstats.core.domain.user.exception.SameNicknameUserAlreadyExistException
+import com.github.lolstats.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException
 import com.github.lolstats.core.domain.user.repository.writable.UserRepository
 
 /**
@@ -19,6 +20,7 @@ interface CreateUserUseCase {
     interface CreateUserMessage {
         val nickname: String
         val email: String
+        val phoneNumber:String
     }
 
     companion object {
@@ -42,9 +44,13 @@ internal class CreateUserUseCaseImpl(
         users.findByEmail(message.email)?.let {
             throw SameEmailUserAlreadyExistException(message.email)
         }
+//        users.findByPhoneNumber(message.phoneNumber)?.let {
+//            throw SamePhoneNumberUserAlreadyExistException(message.phoneNumber)
+//        }
 
         val user = User.create(
             nickname = message.nickname,
+            phoneNumber = "",
             email = message.email
         )
 
