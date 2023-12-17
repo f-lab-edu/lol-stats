@@ -32,6 +32,7 @@ internal class UserEntity(
         id = this.id,
         nickname = this.nickname,
         email = this.email,
+        phoneNumber = "",
         registeredAt = this.registeredAt,
         lastActiveAt = this.lastActiveAt,
         deleted = this.deleted

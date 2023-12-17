@@ -45,6 +45,7 @@ internal class CreateUserUseCaseImpl(
 
         val user = User.create(
             nickname = message.nickname,
+            phoneNumber = "",
             email = message.email
         )
 

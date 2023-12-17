@@ -20,6 +20,7 @@ fun randomUser(
     id = id,
     nickname = nickname,
     email = email,
+    phoneNumber = "",
     registeredAt = registeredAt,
     lastActiveAt = lastActiveAt,
     deleted = deleted
