@@ -4,8 +4,8 @@
  */
 package test.domain.user.aggregate
 
-import com.github.francescojo.core.domain.user.User
 import com.github.javafaker.Faker
+import com.github.lolstats.core.domain.user.User
 import java.time.Instant
 import java.util.*
 

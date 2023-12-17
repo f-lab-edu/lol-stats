@@ -4,9 +4,9 @@
  */
 package test.domain.user
 
-import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
-import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
 import com.github.javafaker.Faker
+import com.github.lolstats.core.domain.user.usecase.CreateUserUseCase
+import com.github.lolstats.core.domain.user.usecase.EditUserUseCase
 
 fun randomCreateUserMessage(
     nickname: String = Faker().name().fullName(),

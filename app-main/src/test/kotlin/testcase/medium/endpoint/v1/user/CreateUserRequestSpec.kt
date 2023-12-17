@@ -5,10 +5,10 @@
 package testcase.medium.endpoint.v1.user
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.github.francescojo.core.domain.user.User
-import com.github.francescojo.core.exception.ErrorCodes
-import com.github.francescojo.endpoint.v1.ApiPathsV1
 import com.github.javafaker.Faker
+import com.github.lolstats.core.domain.user.User
+import com.github.lolstats.core.exception.ErrorCodes
+import com.github.lolstats.endpoint.v1.ApiPathsV1
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.params.ParameterizedTest
