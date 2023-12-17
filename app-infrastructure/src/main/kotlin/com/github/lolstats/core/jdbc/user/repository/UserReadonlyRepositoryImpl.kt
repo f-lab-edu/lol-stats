@@ -40,6 +40,10 @@ internal open class UserReadonlyRepositoryImpl(
     override fun findByEmail(email: String): User? =
         (emailToUserCache.get(email) ?: userEntityJdbcDao.selectByEmail(email)?.let { updateCache(it) })
 
+    override fun findByPhoneNumber(phoneNumber: String): User? {
+        TODO("Not yet implemented")
+    }
+
     protected fun updateCache(userEntity: UserEntity): User {
         val user = userEntity.toUser()
 
