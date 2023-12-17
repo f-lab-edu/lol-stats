@@ -4,9 +4,9 @@
  */
 package testcase.small.domain.user
 
-import com.github.francescojo.core.domain.user.repository.writable.UserRepository
-import com.github.francescojo.core.domain.user.usecase.FindUserUseCase
-import com.github.francescojo.lib.annotation.SmallTest
+import com.github.lolstats.core.domain.user.repository.writable.UserRepository
+import com.github.lolstats.core.domain.user.usecase.FindUserUseCase
+import com.github.lolstats.lib.annotation.SmallTest
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -24,7 +24,7 @@ import java.util.*
 @SmallTest
 class FindUserUseCaseSpec {
     private lateinit var sut: FindUserUseCase
-    private lateinit var userRepository: UserRepository
+    private lateinit var userRepository: com.github.lolstats.core.domain.user.repository.writable.UserRepository
 
     @BeforeEach
     fun setup() {

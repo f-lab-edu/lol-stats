@@ -4,36 +4,43 @@
  */
 package test.domain.user
 
-import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
-import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
+import com.github.lolstats.core.domain.user.usecase.CreateUserUseCase
+import com.github.lolstats.core.domain.user.usecase.EditUserUseCase
 import com.github.javafaker.Faker
+import java.util.*
 
 fun randomCreateUserMessage(
     nickname: String = Faker().name().fullName(),
-    email: String = Faker().internet().emailAddress()
-): CreateUserUseCase.CreateUserMessage {
+    email: String = Faker().internet().emailAddress(),
+    phoneNumber: String = Faker(Locale.KOREAN).phoneNumber().phoneNumber()
+): _root_ide_package_.com.github.lolstats.core.domain.user.usecase.CreateUserUseCase.CreateUserMessage {
     data class FakeCreateUserMessage(
         override val nickname: String,
-        override val email: String
-    ) : CreateUserUseCase.CreateUserMessage
+        override val email: String,
+        override val phoneNumber: String,
+    ) : _root_ide_package_.com.github.lolstats.core.domain.user.usecase.CreateUserUseCase.CreateUserMessage
 
     return FakeCreateUserMessage(
         nickname = nickname,
-        email = email
+        email = email,
+        phoneNumber = phoneNumber,
     )
 }
 
 fun randomEditUserMessage(
     nickname: String? = Faker().name().fullName(),
-    email: String? = Faker().internet().emailAddress()
+    email: String? = Faker().internet().emailAddress(),
+    phoneNumber: String? = Faker(Locale.KOREAN).phoneNumber().phoneNumber()
 ): EditUserUseCase.EditUserMessage {
     data class FakeEditUserMessage(
         override val nickname: String?,
-        override val email: String?
+        override val email: String?,
+        override val phoneNumber: String?
     ) : EditUserUseCase.EditUserMessage
 
     return FakeEditUserMessage(
         nickname = nickname,
-        email = email
+        email = email,
+        phoneNumber = phoneNumber
     )
 }

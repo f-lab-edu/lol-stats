@@ -4,13 +4,16 @@
  */
 package testcase.small.domain.user
 
-import com.github.francescojo.core.domain.user.User
-import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
-import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
-import com.github.francescojo.core.domain.user.exception.UserByIdNotFoundException
-import com.github.francescojo.core.domain.user.repository.writable.UserRepository
-import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
-import com.github.francescojo.lib.annotation.SmallTest
+import com.github.lolstats.core.domain.user.User
+import com.github.lolstats.core.domain.user.exception.SameEmailUserAlreadyExistException
+import com.github.lolstats.core.domain.user.exception.SameNicknameUserAlreadyExistException
+import com.github.lolstats.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException
+import com.github.lolstats.core.domain.user.exception.UserByIdNotFoundException
+import com.github.lolstats.core.domain.user.repository.writable.UserRepository
+import com.github.lolstats.core.domain.user.usecase.EditUserUseCase
+import com.github.lolstats.lib.annotation.SmallTest
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert.assertThat
@@ -28,7 +31,7 @@ import java.util.*
 @SmallTest
 class EditUserUseCaseSpec {
     private lateinit var sut: EditUserUseCase
-    private lateinit var userRepository: UserRepository
+    private lateinit var userRepository: com.github.lolstats.core.domain.user.repository.writable.UserRepository
 
     @BeforeEach
     fun setup() {
@@ -48,7 +51,7 @@ class EditUserUseCaseSpec {
         `when`(userRepository.findByUuid(id)).thenReturn(null)
 
         // then:
-        assertThrows<UserByIdNotFoundException> { sut.editUser(id, randomEditUserMessage()) }
+        assertThrows<com.github.lolstats.core.domain.user.exception.UserByIdNotFoundException> { sut.editUser(id, randomEditUserMessage()) }
     }
 
     @DisplayName("User info is updated by given message")
@@ -68,6 +71,7 @@ class EditUserUseCaseSpec {
         assertAll(
             { assertThat(editedUser.nickname, `is`(message.nickname)) },
             { assertThat(editedUser.email, `is`(message.email)) },
+            { assertThat(editedUser.phoneNumber, `is`(message.phoneNumber)) },
         )
     }
 
@@ -76,7 +80,7 @@ class EditUserUseCaseSpec {
     inner class DuplicationErrorOccurred {
         private lateinit var id: UUID
         private lateinit var message: EditUserUseCase.EditUserMessage
-        private lateinit var existingUser: User
+        private lateinit var existingUser: com.github.lolstats.core.domain.user.User
 
         @BeforeEach
         fun setup() {
@@ -99,7 +103,7 @@ class EditUserUseCaseSpec {
             `when`(userRepository.findByNickname(message.nickname!!)).thenReturn(sameNicknameUser)
 
             // then:
-            assertThrows<SameNicknameUserAlreadyExistException> { sut.editUser(id, message) }
+            assertThrows<com.github.lolstats.core.domain.user.exception.SameNicknameUserAlreadyExistException> { sut.editUser(id, message) }
         }
 
         @DisplayName("Email is duplicated")
@@ -112,7 +116,20 @@ class EditUserUseCaseSpec {
             `when`(userRepository.findByEmail(message.email!!)).thenReturn(sameEmailUser)
 
             // then:
-            assertThrows<SameEmailUserAlreadyExistException> { sut.editUser(id, message) }
+            assertThrows<com.github.lolstats.core.domain.user.exception.SameEmailUserAlreadyExistException> { sut.editUser(id, message) }
+        }
+
+        @DisplayName("PhoneNumber is duplicated")
+        @Test
+        fun errorIfPhoneNumberIsDuplicated() {
+            // given:
+            val samePhoneNumberUser = randomUser(id = id, phoneNumber = message.phoneNumber!!)
+
+            // and:
+            `when`(userRepository.findByPhoneNumber(message.phoneNumber!!)).thenReturn(samePhoneNumberUser)
+
+            // then:
+            assertThrows<com.github.lolstats.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException> { sut.editUser(id, message) }
         }
     }
 
@@ -120,7 +137,7 @@ class EditUserUseCaseSpec {
     @Nested
     inner class SomeFieldIsPreserved {
         private lateinit var id: UUID
-        private lateinit var existingUser: User
+        private lateinit var existingUser: com.github.lolstats.core.domain.user.User
 
         @BeforeEach
         fun setup() {
@@ -143,9 +160,10 @@ class EditUserUseCaseSpec {
 
             // expect:
             assertAll(
-                { assertThat(updatedUser.nickname, `is`(existingUser.nickname)) },
-                { assertThat(updatedUser.nickname, not(message.nickname)) },
-                { assertThat(updatedUser.email, `is`(message.email)) },
+                { updatedUser.nickname shouldBe existingUser.nickname },
+                { updatedUser.nickname shouldNotBe message.nickname },
+                { updatedUser.email shouldBe message.email },
+                { updatedUser.phoneNumber shouldBe message.phoneNumber }
             )
         }
 
@@ -160,9 +178,28 @@ class EditUserUseCaseSpec {
 
             // expect:
             assertAll(
+                    { updatedUser.nickname shouldBe message.nickname },
+                    { updatedUser.email shouldBe existingUser.email },
+                    { updatedUser.email shouldNotBe message.email },
+                    { updatedUser.phoneNumber shouldBe message.phoneNumber },
+            )
+        }
+
+        @DisplayName("PhoneNumber is omitted in message")
+        @Test
+        fun phoneNumberIsPreserved() {
+            // given:
+            val message = randomEditUserMessage(phoneNumber = null)
+
+            // then:
+            val updatedUser = sut.editUser(id, message)
+
+            // expect:
+            assertAll(
                 { assertThat(updatedUser.nickname, `is`(message.nickname)) },
-                { assertThat(updatedUser.email, `is`(existingUser.email)) },
-                { assertThat(updatedUser.email, not(message.email)) }
+                { assertThat(updatedUser.email, `is`(message.email)) },
+                { assertThat(updatedUser.phoneNumber, `is`(existingUser.phoneNumber)) },
+                { assertThat(updatedUser.phoneNumber, `not`(message.phoneNumber)) },
             )
         }
     }

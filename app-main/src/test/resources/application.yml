@@ -17,6 +17,6 @@ spring:
 logging:
   level:
     ROOT: INFO
-    com.github.francescojo: TRACE
+    com.github.lolstats: TRACE
     org.springframework.web.filter: TRACE
     org.springframework.web.servlet: TRACE

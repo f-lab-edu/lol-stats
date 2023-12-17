@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `users`
     `id`             BINARY(16)  PRIMARY KEY,
     `nickname`       VARCHAR(64) NOT NULL,
     `email`          VARCHAR(64) NOT NULL,
+    `phone_number`          VARCHAR(64) NOT NULL,
     `deleted`        BOOLEAN     DEFAULT FALSE,
     `created_at`     DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`     DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -11,5 +12,6 @@ CREATE TABLE IF NOT EXISTS `users`
 
     CONSTRAINT `uk_users_seq`      UNIQUE (`seq`),
     CONSTRAINT `uk_users_email`    UNIQUE (`email`),
-    CONSTRAINT `uk_users_identity` UNIQUE (`nickname`, `email`)
+    CONSTRAINT `uk_users_phone_number`    UNIQUE (`phone_number`),
+    CONSTRAINT `uk_users_identity` UNIQUE (`nickname`, `email`, `phone_number`)
 );

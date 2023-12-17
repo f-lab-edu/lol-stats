@@ -4,9 +4,9 @@
  */
 package testcase.large.endpoint.v1.user
 
-import com.github.francescojo.core.exception.ErrorCodes
-import com.github.francescojo.endpoint.v1.user.common.UserResponse
-import com.github.francescojo.endpoint.v1.user.create.CreateUserRequest
+import com.github.lolstats.core.exception.ErrorCodes
+import com.github.lolstats.endpoint.v1.user.common.UserResponse
+import com.github.lolstats.endpoint.v1.user.create.CreateUserRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.*
@@ -64,12 +64,22 @@ class CreateUserApiSpec : EndpointLargeTestBase() {
                 .expect4xx(HttpStatus.CONFLICT)
                 .withExceptionCode(ErrorCodes.USER_BY_EMAIL_DUPLICATED)
         }
+
+        @DisplayName("Phone Number is duplicated")
+        @Test
+        fun phoneNumberIsDuplicated() {
+            // expect:
+            createUserApi(CreateUserRequest.random(email = createdUser.phoneNumber))
+                .expect4xx(HttpStatus.CONFLICT)
+                .withExceptionCode(ErrorCodes.USER_BY_PHONE_NUMBER_DUPLICATED)
+        }
     }
 
     private fun assertThat(actual: UserResponse, isReflecting: CreateUserRequest) {
         assertAll(
             { assertThat(actual.nickname, `is`(isReflecting.nickname)) },
-            { assertThat(actual.email, `is`(isReflecting.email)) }
+            { assertThat(actual.email, `is`(isReflecting.email)) },
+            { assertThat(actual.phoneNumber, `is`(isReflecting.phoneNumber)) }
         )
     }
 }

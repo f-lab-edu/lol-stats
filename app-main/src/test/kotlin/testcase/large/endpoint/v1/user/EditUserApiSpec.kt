@@ -4,9 +4,9 @@
  */
 package testcase.large.endpoint.v1.user
 
-import com.github.francescojo.core.exception.ErrorCodes
-import com.github.francescojo.endpoint.v1.user.common.UserResponse
-import com.github.francescojo.endpoint.v1.user.edit.EditUserRequest
+import com.github.lolstats.core.exception.ErrorCodes
+import com.github.lolstats.endpoint.v1.user.common.UserResponse
+import com.github.lolstats.endpoint.v1.user.edit.EditUserRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.*
@@ -87,6 +87,18 @@ class EditUserApiSpec : EndpointLargeTestBase() {
             // then:
             assertThat(editedUser, isReflecting = request)
         }
+
+        @ParameterizedTest(name = "PhoneNumber is {0}")
+        @MethodSource("testcase.large.endpoint.v1.user.EditUserApiSpec#emptyPhoneNumber")
+        @Suppress("UNUSED_PARAMETER")
+        fun phoneNumberIsOmitted(_testName: String, request: EditUserRequest) {
+            // when:
+            val editedUser = editUserApi(createdUser.id, request)
+                .expect2xx(UserResponse::class)
+
+            // then:
+            assertThat(editedUser, isReflecting = request)
+        }
     }
 
     @DisplayName("Cannot edit user if:")
@@ -109,6 +121,15 @@ class EditUserApiSpec : EndpointLargeTestBase() {
                 .expect4xx(HttpStatus.CONFLICT)
                 .withExceptionCode(ErrorCodes.USER_BY_EMAIL_DUPLICATED)
         }
+
+        @DisplayName("PhoneNumber is duplicated")
+        @Test
+        fun phoneNumberIsDuplicated() {
+            // expect:
+            editUserApi(createdUser.id, EditUserRequest.random(phoneNumber = createdUser.phoneNumber))
+                .expect4xx(HttpStatus.CONFLICT)
+                .withExceptionCode(ErrorCodes.USER_BY_PHONE_NUMBER_DUPLICATED)
+        }
     }
 
     private fun assertThat(actual: UserResponse, isReflecting: EditUserRequest) {
@@ -122,6 +143,11 @@ class EditUserApiSpec : EndpointLargeTestBase() {
                 if (isReflecting.email != null) {
                     assertThat(actual.email, `is`(isReflecting.email))
                 }
+            },
+            {
+                if (isReflecting.phoneNumber != null) {
+                    assertThat(actual.phoneNumber, `is`(isReflecting.phoneNumber))
+                }
             }
         )
     }
@@ -131,6 +157,12 @@ class EditUserApiSpec : EndpointLargeTestBase() {
         fun emptyEmails(): Stream<Arguments> = Stream.of(
             Arguments.of("null", EditUserRequest.random(email = null)),
             Arguments.of("empty", EditUserRequest.random(email = ""))
+        )
+
+        @JvmStatic
+        fun emptyPhoneNumber(): Stream<Arguments> = Stream.of(
+            Arguments.of("null", EditUserRequest.random(phoneNumber = null)),
+            Arguments.of("empty", EditUserRequest.random(phoneNumber = ""))
         )
     }
 }

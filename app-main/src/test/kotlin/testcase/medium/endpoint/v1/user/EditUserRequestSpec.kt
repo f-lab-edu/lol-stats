@@ -5,9 +5,9 @@
 package testcase.medium.endpoint.v1.user
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.github.francescojo.core.domain.user.User
-import com.github.francescojo.core.exception.ErrorCodes
-import com.github.francescojo.endpoint.v1.ApiPathsV1
+import com.github.lolstats.core.domain.user.User
+import com.github.lolstats.core.exception.ErrorCodes
+import com.github.lolstats.endpoint.v1.ApiPathsV1
 import com.github.javafaker.Faker
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -32,7 +32,8 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
         // given:
         val payload = FakeEditUserRequest(
             nickname = nickname,
-            email = Faker().internet().emailAddress()
+            email = Faker().internet().emailAddress(),
+            phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
         )
 
         // when:
@@ -54,7 +55,31 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
         // given:
         val payload = FakeEditUserRequest(
             nickname = Faker().name().fullName(),
-            email = email
+            email = email,
+            phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
+        )
+
+        // when:
+        val request = patch(ApiPathsV1.usersId(UUID.randomUUID()), payload)
+
+        // then:
+        val errorResponse = request.send().expect4xx()
+
+        // expect:
+        assertThat(ErrorCodes.from(errorResponse.code), `is`(ErrorCodes.WRONG_INPUT))
+    }
+
+    @ParameterizedTest(name = "Fails if it is {0}")
+    @MethodSource("badPhoneNumbers")
+    fun failIfPhoneNumbersAreBad(
+        testName: String,
+        phoneNumber: String
+    ) {
+        // given:
+        val payload = FakeEditUserRequest(
+            nickname = Faker().name().fullName(),
+            email = Faker().internet().emailAddress(),
+            phoneNumber = phoneNumber,
         )
 
         // when:
@@ -85,19 +110,20 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
     @JsonDeserialize
     data class FakeEditUserRequest(
         val nickname: String?,
-        val email: String?
+        val email: String?,
+        val phoneNumber: String?,
     )
 
     companion object {
         @JvmStatic
         fun badNicknames(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                "shorter than ${User.LENGTH_NAME_MIN}",
-                Faker().letterify("?").repeat(User.LENGTH_NAME_MIN - 1),
+                "shorter than ${com.github.lolstats.core.domain.user.User.LENGTH_NAME_MIN}",
+                Faker().letterify("?").repeat(com.github.lolstats.core.domain.user.User.LENGTH_NAME_MIN - 1),
             ),
             Arguments.of(
-                "longer than ${User.LENGTH_NAME_MAX}",
-                Faker().letterify("?").repeat(User.LENGTH_NAME_MAX + 1),
+                "longer than ${com.github.lolstats.core.domain.user.User.LENGTH_NAME_MAX}",
+                Faker().letterify("?").repeat(com.github.lolstats.core.domain.user.User.LENGTH_NAME_MAX + 1),
             )
         )
 
@@ -108,8 +134,20 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
                 Faker().lorem().word(),
             ),
             Arguments.of(
-                "longer than ${User.LENGTH_EMAIL_MAX}",
-                Faker().letterify("?").repeat(User.LENGTH_EMAIL_MAX + 1) + "@company.com",
+                "longer than ${com.github.lolstats.core.domain.user.User.LENGTH_EMAIL_MAX}",
+                Faker().letterify("?").repeat(com.github.lolstats.core.domain.user.User.LENGTH_EMAIL_MAX + 1) + "@company.com",
+            )
+        )
+
+        @JvmStatic
+        fun badPhoneNumbers(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                "not an Korea phone number format",
+                Faker(Locale.US).phoneNumber().phoneNumber(),
+            ),
+            Arguments.of(
+                "longer than ${com.github.lolstats.core.domain.user.User.LENGTH_PHONE_NUMBER_MAX}",
+                Faker().letterify("?").repeat(com.github.lolstats.core.domain.user.User.LENGTH_PHONE_NUMBER_MAX + 1),
             )
         )
 
@@ -119,14 +157,16 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
                 "empty",
                 FakeEditUserRequest(
                     nickname = "",
-                    email = ""
+                    email = "",
+                    phoneNumber = "",
                 ),
             ),
             Arguments.of(
                 "null",
                 FakeEditUserRequest(
                     nickname = null,
-                    email = null
+                    email = null,
+                    phoneNumber = null,
                 ),
             ),
         )
