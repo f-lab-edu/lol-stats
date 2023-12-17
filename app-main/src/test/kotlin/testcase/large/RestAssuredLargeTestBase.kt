@@ -5,9 +5,9 @@
 package testcase.large
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.francescojo.KopringApplication
-import com.github.francescojo.endpoint.ErrorResponseEnvelope
-import com.github.francescojo.lib.annotation.LargeTest
+import com.github.lolstats.KopringApplication
+import com.github.lolstats.endpoint.ErrorResponseEnvelope
+import com.github.lolstats.lib.annotation.LargeTest
 import io.restassured.RestAssured
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.config.ObjectMapperConfig

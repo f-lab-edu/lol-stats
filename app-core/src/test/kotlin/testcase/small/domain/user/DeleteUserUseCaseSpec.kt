@@ -4,10 +4,10 @@
  */
 package testcase.small.domain.user
 
-import com.github.francescojo.core.domain.user.exception.UserByIdNotFoundException
-import com.github.francescojo.core.domain.user.repository.writable.UserRepository
-import com.github.francescojo.core.domain.user.usecase.DeleteUserUseCase
-import com.github.francescojo.lib.annotation.SmallTest
+import com.github.lolstats.core.domain.user.exception.UserByIdNotFoundException
+import com.github.lolstats.core.domain.user.repository.writable.UserRepository
+import com.github.lolstats.core.domain.user.usecase.DeleteUserUseCase
+import com.github.lolstats.lib.annotation.SmallTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach

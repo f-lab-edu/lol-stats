@@ -4,9 +4,9 @@
  */
 package testcase.medium.jdbc.user
 
-import com.github.francescojo.core.jdbc.user.UserEntity
-import com.github.francescojo.core.jdbc.user.dao.UserEntityDao
 import com.github.javafaker.Faker
+import com.github.lolstats.core.jdbc.user.UserEntity
+import com.github.lolstats.core.jdbc.user.dao.UserEntityDao
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*

@@ -4,13 +4,13 @@
  */
 package testcase.small.domain.user
 
-import com.github.francescojo.core.domain.user.User
-import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
-import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
-import com.github.francescojo.core.domain.user.exception.UserByIdNotFoundException
-import com.github.francescojo.core.domain.user.repository.writable.UserRepository
-import com.github.francescojo.core.domain.user.usecase.EditUserUseCase
-import com.github.francescojo.lib.annotation.SmallTest
+import com.github.lolstats.core.domain.user.User
+import com.github.lolstats.core.domain.user.exception.SameEmailUserAlreadyExistException
+import com.github.lolstats.core.domain.user.exception.SameNicknameUserAlreadyExistException
+import com.github.lolstats.core.domain.user.exception.UserByIdNotFoundException
+import com.github.lolstats.core.domain.user.repository.writable.UserRepository
+import com.github.lolstats.core.domain.user.usecase.EditUserUseCase
+import com.github.lolstats.lib.annotation.SmallTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert.assertThat

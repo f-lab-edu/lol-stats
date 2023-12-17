@@ -4,11 +4,11 @@
  */
 package testcase.small.domain.user
 
-import com.github.francescojo.core.domain.user.exception.SameEmailUserAlreadyExistException
-import com.github.francescojo.core.domain.user.exception.SameNicknameUserAlreadyExistException
-import com.github.francescojo.core.domain.user.repository.writable.UserRepository
-import com.github.francescojo.core.domain.user.usecase.CreateUserUseCase
-import com.github.francescojo.lib.annotation.SmallTest
+import com.github.lolstats.core.domain.user.exception.SameEmailUserAlreadyExistException
+import com.github.lolstats.core.domain.user.exception.SameNicknameUserAlreadyExistException
+import com.github.lolstats.core.domain.user.repository.writable.UserRepository
+import com.github.lolstats.core.domain.user.usecase.CreateUserUseCase
+import com.github.lolstats.lib.annotation.SmallTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
