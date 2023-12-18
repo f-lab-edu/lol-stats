@@ -9,6 +9,7 @@ import com.github.javafaker.Faker
 import com.github.lolstats.core.domain.user.User
 import com.github.lolstats.core.exception.ErrorCodes
 import com.github.lolstats.endpoint.v1.ApiPathsV1
+import com.github.lolstats.endpoint.v1.user.edit.EditUserRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.params.ParameterizedTest
@@ -30,9 +31,10 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
         nickname: String
     ) {
         // given:
-        val payload = FakeEditUserRequest(
+        val payload = EditUserRequest(
             nickname = nickname,
-            email = Faker().internet().emailAddress()
+            email = Faker().internet().emailAddress(),
+            phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber()
         )
 
         // when:
@@ -52,9 +54,10 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
         email: String
     ) {
         // given:
-        val payload = FakeEditUserRequest(
+        val payload = EditUserRequest(
             nickname = Faker().name().fullName(),
-            email = email
+            email = email,
+            phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber()
         )
 
         // when:
@@ -66,12 +69,33 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
         // expect:
         assertThat(ErrorCodes.from(errorResponse.code), `is`(ErrorCodes.WRONG_INPUT))
     }
+    @ParameterizedTest(name = "Fails if it is {0}")
+    @MethodSource("badPhoneNumbers")
+    fun failIfPhoneNumbersAreBad(
+        testName: String,
+        phoneNumber: String
+    ) {
+        // given:
+        val payload = EditUserRequest(
+            nickname = Faker().name().fullName(),
+            email = Faker().internet().emailAddress(),
+            phoneNumber = phoneNumber,
+        )
 
+        // when:
+        val request = patch(ApiPathsV1.usersId(UUID.randomUUID()), payload)
+
+        // then:
+        val errorResponse = request.send().expect4xx()
+
+        // expect:
+        assertThat(ErrorCodes.from(errorResponse.code), `is`(ErrorCodes.WRONG_INPUT))
+    }
     @ParameterizedTest(name = "Fails if all request fields are {0}")
     @MethodSource("nullOrEmptyFields")
     fun failsIfAllRequestFieldsAreEmpty(
         testName: String,
-        payload: FakeEditUserRequest
+        payload: EditUserRequest
     ) {
         val request = patch(ApiPathsV1.usersId(UUID.randomUUID()), payload)
 
@@ -81,12 +105,6 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
         // expect:
         assertThat(ErrorCodes.from(errorResponse.code), `is`(ErrorCodes.WRONG_INPUT))
     }
-
-    @JsonDeserialize
-    data class FakeEditUserRequest(
-        val nickname: String?,
-        val email: String?
-    )
 
     companion object {
         @JvmStatic
@@ -114,19 +132,33 @@ class EditUserRequestSpec : ControllerMediumTestBase() {
         )
 
         @JvmStatic
+        fun badPhoneNumbers(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                "not an Korea phone number format",
+                Faker(Locale.US).phoneNumber().phoneNumber(),
+            ),
+            Arguments.of(
+                "longer than ${User.LENGTH_PHONE_NUMBER_MAX}",
+                Faker().letterify("?").repeat(User.LENGTH_PHONE_NUMBER_MAX + 1),
+            )
+        )
+
+        @JvmStatic
         fun nullOrEmptyFields(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 "empty",
-                FakeEditUserRequest(
+                EditUserRequest(
                     nickname = "",
-                    email = ""
+                    email = "",
+                    phoneNumber = ""
                 ),
             ),
             Arguments.of(
                 "null",
-                FakeEditUserRequest(
+                EditUserRequest(
                     nickname = null,
-                    email = null
+                    email = null,
+                    phoneNumber = null,
                 ),
             ),
         )

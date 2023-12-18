@@ -35,7 +35,7 @@ class CreateUserRequestSpec : ControllerMediumTestBase() {
             nickname = nickname,
             email = Faker().internet().emailAddress(),
             phoneNumber = Faker(Locale.KOREAN).phoneNumber().phoneNumber(),
-            )
+        )
 
         // when:
         val request = post(ApiPathsV1.USERS, payload)

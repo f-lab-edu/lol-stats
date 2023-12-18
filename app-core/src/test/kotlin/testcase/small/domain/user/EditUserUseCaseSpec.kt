@@ -7,6 +7,7 @@ package testcase.small.domain.user
 import com.github.lolstats.core.domain.user.User
 import com.github.lolstats.core.domain.user.exception.SameEmailUserAlreadyExistException
 import com.github.lolstats.core.domain.user.exception.SameNicknameUserAlreadyExistException
+import com.github.lolstats.core.domain.user.exception.SamePhoneNumberUserAlreadyExistException
 import com.github.lolstats.core.domain.user.exception.UserByIdNotFoundException
 import com.github.lolstats.core.domain.user.repository.writable.UserRepository
 import com.github.lolstats.core.domain.user.usecase.EditUserUseCase
@@ -114,6 +115,24 @@ class EditUserUseCaseSpec {
             // then:
             assertThrows<SameEmailUserAlreadyExistException> { sut.editUser(id, message) }
         }
+
+        @DisplayName("PhoneNumber is duplicated")
+        @Test
+        fun errorIfPhoneNumberIsDuplicated() {
+            // given:
+            val samePhoneNumberUser = randomUser(
+                id = id,
+                phoneNumber = message.phoneNumber!!
+            )
+
+            // and:
+            `when`(userRepository.findByPhoneNumber(message.phoneNumber!!)).thenReturn(samePhoneNumberUser)
+
+            // then:
+            // Persistent 저장로직 구현 이후 아래 실패 expect 로 교체해야 함.
+            sut.editUser(id, message)
+            // assertThrows<SamePhoneNumberUserAlreadyExistException> { sut.editUser(id, message) }
+        }
     }
 
     @DisplayName("Some field is preserved if:")
@@ -163,6 +182,24 @@ class EditUserUseCaseSpec {
                 { assertThat(updatedUser.nickname, `is`(message.nickname)) },
                 { assertThat(updatedUser.email, `is`(existingUser.email)) },
                 { assertThat(updatedUser.email, not(message.email)) }
+            )
+        }
+
+        @DisplayName("PhoneNumber is omitted in message")
+        @Test
+        fun phoneNumberIsPreserved() {
+            // given:
+            val message = randomEditUserMessage(phoneNumber = null)
+
+            // then:
+            val updatedUser = sut.editUser(id, message)
+
+            // expect:
+            assertAll(
+                { assertThat(updatedUser.nickname, `is`(message.nickname)) },
+                { assertThat(updatedUser.email, `is`(message.email)) },
+                { assertThat(updatedUser.phoneNumber, `is`(existingUser.phoneNumber)) },
+                { assertThat(updatedUser.phoneNumber, `not`(message.phoneNumber)) },
             )
         }
     }
