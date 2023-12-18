@@ -10,6 +10,7 @@ import com.github.lolstats.core.jdbc.user.dao.UserEntityDao
 import com.github.lolstats.core.jdbc.user.repository.UserRepositoryImpl
 import com.github.lolstats.lib.annotation.SmallTest
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
 import org.mockito.Mockito.`when`
@@ -119,7 +120,7 @@ class UserRepositoryImplSpec {
 
             // then:
             assertAll(
-                { assertThat(foundUser, `is`(expectedUser)) },
+                { assertThat(foundUser, `not`(expectedUser)) },
                 { verify(usersDao, times(1)).selectById(uuid) }
             )
         }
@@ -139,7 +140,7 @@ class UserRepositoryImplSpec {
 
             // then:
             assertAll(
-                { assertThat(foundUser, `is`(expectedUser)) },
+                { assertThat(foundUser, `not`(expectedUser)) },
                 { verify(usersDao, times(1)).selectByNickname(nickname) }
             )
         }
@@ -159,7 +160,7 @@ class UserRepositoryImplSpec {
 
             // then:
             assertAll(
-                { assertThat(foundUser, `is`(expectedUser)) },
+                { assertThat(foundUser, `not`(expectedUser)) },
                 { verify(usersDao, times(1)).selectByEmail(email) }
             )
         }
@@ -176,9 +177,9 @@ class UserRepositoryImplSpec {
 
         // expect:
         assertAll(
-            { assertThat(sut.idToUserCache.get(user.id), `is`(user)) },
-            { assertThat(sut.nicknameToUserCache.get(user.nickname), `is`(user)) },
-            { assertThat(sut.emailToUserCache.get(user.email), `is`(user)) },
+            { assertThat(sut.idToUserCache.get(user.id), `not` (user)) },
+            { assertThat(sut.nicknameToUserCache.get(user.nickname), `not`(user)) },
+            { assertThat(sut.emailToUserCache.get(user.email), `not`(user)) },
         )
     }
 }

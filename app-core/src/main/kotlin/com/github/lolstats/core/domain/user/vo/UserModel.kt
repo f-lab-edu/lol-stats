@@ -26,7 +26,7 @@ internal data class UserModel(
     fun applyValues(values: EditUserUseCase.EditUserMessage): User = this.copy(
         nickname = values.nickname ?: this.nickname,
         email = values.email ?: this.email,
-        phoneNumber = "",
+        phoneNumber = values.phoneNumber ?: this.phoneNumber,
         lastActiveAt = Instant.now()
     )
 

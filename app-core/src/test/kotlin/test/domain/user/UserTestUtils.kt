@@ -29,15 +29,18 @@ fun randomCreateUserMessage(
 
 fun randomEditUserMessage(
     nickname: String? = Faker().name().fullName(),
-    email: String? = Faker().internet().emailAddress()
+    email: String? = Faker().internet().emailAddress(),
+    phoneNumber: String? = Faker(Locale.KOREAN).phoneNumber().phoneNumber()
 ): EditUserUseCase.EditUserMessage {
     data class FakeEditUserMessage(
         override val nickname: String?,
-        override val email: String?
+        override val email: String?,
+        override val phoneNumber: String?,
     ) : EditUserUseCase.EditUserMessage
 
     return FakeEditUserMessage(
         nickname = nickname,
-        email = email
+        email = email,
+        phoneNumber = phoneNumber
     )
 }
